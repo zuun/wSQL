@@ -49,6 +49,7 @@
          this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
          this.scriptToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
          this.runScriptToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+         this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
          this.panel3.SuspendLayout();
          this.mainMenu.SuspendLayout();
          this.SuspendLayout();
@@ -206,7 +207,8 @@
          // scriptToolStripMenuItem
          // 
          this.scriptToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.runScriptToolStripMenuItem});
+            this.runScriptToolStripMenuItem,
+            this.toolStripMenuItem5});
          this.scriptToolStripMenuItem.Name = "scriptToolStripMenuItem";
          this.scriptToolStripMenuItem.Size = new System.Drawing.Size(49, 20);
          this.scriptToolStripMenuItem.Text = "Script";
@@ -218,6 +220,11 @@
          this.runScriptToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
          this.runScriptToolStripMenuItem.Text = "Run script";
          this.runScriptToolStripMenuItem.Click += new System.EventHandler(this.runScriptToolStripMenuItem_Click);
+         // 
+         // toolStripMenuItem5
+         // 
+         this.toolStripMenuItem5.Name = "toolStripMenuItem5";
+         this.toolStripMenuItem5.Size = new System.Drawing.Size(149, 6);
          // 
          // frmMain
          // 
@@ -262,6 +269,7 @@
       private System.Windows.Forms.SaveFileDialog saveFileDialog1;
       private System.Windows.Forms.ToolStripMenuItem scriptToolStripMenuItem;
       private System.Windows.Forms.ToolStripMenuItem runScriptToolStripMenuItem;
+      private System.Windows.Forms.ToolStripSeparator toolStripMenuItem5;
    }
 }
 

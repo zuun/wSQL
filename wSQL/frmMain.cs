@@ -273,7 +273,12 @@ namespace wSQL
 
       private void runScriptToolStripMenuItem_Click(object sender, EventArgs e)
       {
-         runtimeCore.RunScript(CurrentTB.Text);
+         var response = runtimeCore.RunScript(CurrentTB.Text);
+
+         if (((dynamic)response).PageContent != null)
+         {
+            //enable vhiw for page content
+         }
       }
 
       private void tabContainer_SelectedIndexChanged(object sender, EventArgs e)
