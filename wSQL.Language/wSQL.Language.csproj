@@ -43,6 +43,7 @@
     <Compile Include="Contracts\Symbols.cs" />
     <Compile Include="Services\Interpreter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\SymbolsTable.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\wSQL.Business\wSQL.Business.csproj">
