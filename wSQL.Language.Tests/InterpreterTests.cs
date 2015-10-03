@@ -1,5 +1,6 @@
 ﻿using FakeItEasy;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using wSQL.Business.Repository;
 using wSQL.Language.Contracts;
 using wSQL.Language.Services;
 
@@ -18,22 +19,41 @@ namespace wSQL.Language.Tests
       sut = new Interpreter(symbols);
     }
 
-    [TestMethod]
-    public void IntepretsDeclareWithSingleName()
+    [TestClass]
+    public class Declare : InterpreterTests
     {
-      sut.Run("declare abc", null);
+      [TestMethod]
+      public void IntepretsDeclareWithSingleName()
+      {
+        sut.Run("declare abc", null);
 
-      A.CallTo(() => symbols.Declare("abc")).MustHaveHappened();
+        A.CallTo(() => symbols.Declare("abc")).MustHaveHappened();
+      }
+
+      [TestMethod]
+      public void InterpretsDeclareWithMultipleNames()
+      {
+        sut.Run("declare a,b, c", null);
+
+        A.CallTo(() => symbols.Declare("a")).MustHaveHappened();
+        A.CallTo(() => symbols.Declare("b")).MustHaveHappened();
+        A.CallTo(() => symbols.Declare("c")).MustHaveHappened();
+      }
     }
 
-    [TestMethod]
-    public void InterpretsDeclareWithMultipleNames()
+    [TestClass]
+    public class Print : InterpreterTests
     {
-      sut.Run("declare a,b, c", null);
+      [TestMethod]
+      public void PrintsSingleVariable()
+      {
+        A.CallTo(() => symbols.Get("abc")).Returns("def");
+        var core = A.Fake<WebCoreRepository>();
 
-      A.CallTo(() => symbols.Declare("a")).MustHaveHappened();
-      A.CallTo(() => symbols.Declare("b")).MustHaveHappened();
-      A.CallTo(() => symbols.Declare("c")).MustHaveHappened();
+        sut.Run("print abc", core);
+
+        A.CallTo(() => core.Print("def")).MustHaveHappened();
+      }
     }
   }
 }

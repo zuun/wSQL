@@ -24,7 +24,7 @@ Declare("descriptionNodes");
 Declare("descriptions");
 
 // page = load "https://www.google.com/search?q=something+to+search&cad=cbv&sei=drQPVuWtDoS7acCjptgG"
-var temp1 = core.Load("https://www.google.com/search?q=something+to+search&cad=cbv&sei=drQPVuWtDoS7acCjptgG");
+var temp1 = core.OpenPage("https://www.google.com/search?q=something+to+search&cad=cbv&sei=drQPVuWtDoS7acCjptgG");
 Set("page", temp1);
 
 // print page

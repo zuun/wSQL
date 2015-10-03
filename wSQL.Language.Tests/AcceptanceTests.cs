@@ -24,7 +24,7 @@ namespace wSQL.Language.Tests
       A.CallTo(() => symbols.Declare("descriptionNodes")).MustHaveHappened();
       A.CallTo(() => symbols.Declare("descriptions")).MustHaveHappened();
 
-      A.CallTo(() => core.Load("https://www.google.com/search?q=something+to+search&cad=cbv&sei=drQPVuWtDoS7acCjptgG")).MustHaveHappened();
+      A.CallTo(() => core.OpenPage("https://www.google.com/search?q=something+to+search&cad=cbv&sei=drQPVuWtDoS7acCjptgG")).MustHaveHappened();
       A.CallTo(() => symbols.Set("page", A<object>.Ignored)).MustHaveHappened();
 
       A.CallTo(() => symbols.Get("page")).MustHaveHappened();
