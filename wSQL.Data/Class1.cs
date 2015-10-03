@@ -8,5 +8,7 @@ namespace wSQL.Data
 {
     public class Class1
     {
+
+
     }
 }
