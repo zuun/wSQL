@@ -10,8 +10,8 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using wSQL.Business.Contracts;
 using wSQL.Business.Repository;
+using wSQL.Business.Services;
 using wSQL.Data.Models;
 using wSQL.Library;
 

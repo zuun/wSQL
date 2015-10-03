@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Dynamic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Dynamic;
 using wSQL.Business.Repository;
 
-namespace wSQL.Business.Contracts
+namespace wSQL.Business.Services
 {
    public class RuntimeCore : RuntimeCoreRepository
    {
