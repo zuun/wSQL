@@ -1,0 +1,9 @@
+
+
+Parse script:
+   - allow comments
+   - extract line command
+
+Script response:
+   - text
+   - DataSet

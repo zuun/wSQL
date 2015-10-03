@@ -85,6 +85,18 @@
       <Project>{6DD14A85-CCFC-4774-BD26-0F5772512319}</Project>
       <Name>FastColoredTextBox</Name>
     </ProjectReference>
+    <ProjectReference Include="..\wSQL.Business\wSQL.Business.csproj">
+      <Project>{d2e739a3-3a31-4b04-83b7-8fb8c7d4a1b1}</Project>
+      <Name>wSQL.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\wSQL.Data\wSQL.Data.csproj">
+      <Project>{90c5e1ed-565f-4f74-8773-51d75ef56908}</Project>
+      <Name>wSQL.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\wSQL.Library\wSQL.Library.csproj">
+      <Project>{00e48f36-3889-4e50-afeb-be0ee3758eb7}</Project>
+      <Name>wSQL.Library</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
