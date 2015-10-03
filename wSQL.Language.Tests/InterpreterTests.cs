@@ -25,5 +25,15 @@ namespace wSQL.Language.Tests
 
       A.CallTo(() => symbols.Declare("abc")).MustHaveHappened();
     }
+
+    [TestMethod]
+    public void InterpretsDeclareWithMultipleNames()
+    {
+      sut.Run("declare a,b, c", null);
+
+      A.CallTo(() => symbols.Declare("a")).MustHaveHappened();
+      A.CallTo(() => symbols.Declare("b")).MustHaveHappened();
+      A.CallTo(() => symbols.Declare("c")).MustHaveHappened();
+    }
   }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using wSQL.Business.Repository;
 using wSQL.Language.Contracts;
 using wSQL.Language.Models;
@@ -29,7 +30,8 @@ namespace wSQL.Language.Services
             if (tokens.Count < 2)
               throw new Exception("Missing variable name.");
 
-            symbols.Declare(tokens[1].Value);
+            foreach (var token in tokens.Skip(1))
+              symbols.Declare(token.Value);
             break;
         }
       }
@@ -41,9 +43,8 @@ namespace wSQL.Language.Services
 
     private static IEnumerable<Token> Parse(string line)
     {
-      return line
-        .Split(' ')
-        .Select(it => new Token(TokenType.Identifier, it));
+      var identifiers = Regex.Matches(line, "[A-Za-z_][A-Za-z0-9_]*");
+      return identifiers.Cast<Match>().Select(it => new Token(TokenType.Identifier, it.Value));
     }
   }
 }
