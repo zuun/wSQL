@@ -18,36 +18,36 @@ bool Run(string script, Core core);
 *** Result of interpreting the source program
 
 // declare page, list, descriptionNodes, descriptions
-core.Declare("page");
-core.Declare("list");
-core.Declare("descriptionNodes");
-core.Declare("descriptions");
+Declare("page");
+Declare("list");
+Declare("descriptionNodes");
+Declare("descriptions");
 
 // page = load "https://www.google.com/search?q=something+to+search&cad=cbv&sei=drQPVuWtDoS7acCjptgG"
 var temp1 = core.Load("https://www.google.com/search?q=something+to+search&cad=cbv&sei=drQPVuWtDoS7acCjptgG");
-core.Set("page", temp1);
+Set("page", temp1);
 
 // print page
-var temp2 = core.Get("page");
+var temp2 = Get("page");
 core.Print(temp2);
 
 // list = find(page, "//div[class='srg']/div[class='g pb']");
-var temp3 = core.Get("page");
+var temp3 = Get("page");
 var temp4 = core.Find(temp3, "//div[class='srg']/div[class='g pb']");
-core.Set("list", temp4);
+Set("list", temp4);
 
 // descriptionNodes = flatten(map(list, it => find(it, "div[class='st']")));
-var temp5 = core.Get("list");
+var temp5 = Get("list");
 var temp6 = temp5.Select(it => core.Find(it, "div[class='st']"));
 var temp7 = temp6.Select(it => it);
-core.Set("descriptionNodes", temp7);
+Set("descriptionNodes", temp7);
 
 // descriptions = map(descriptionNodes, it => it.InnerText);
-var temp8 = core.Get("descriptionNodes");
+var temp8 = Get("descriptionNodes");
 var temp9 = temp8.Select(it => it.InnerText);
-core.Set("descriptions", temp9);
+Set("descriptions", temp9);
 
 // print descriptions
-var temp10 = core.Get("descriptions");
+var temp10 = Get("descriptions");
 core.Print(temp10);
 

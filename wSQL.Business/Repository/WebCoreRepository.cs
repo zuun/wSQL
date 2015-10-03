@@ -7,10 +7,6 @@
 
     string Load(string url);
     
-    void Declare(string name);
-    void Set(string name, dynamic value);
-    dynamic Get(string name);
-    
     void Print(dynamic value);
     dynamic Find(string value, string xpath);
   }

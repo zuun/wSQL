@@ -33,21 +33,6 @@ namespace wSQL.Business.Services
       return "";
     }
 
-    public void Declare(string variable)
-    {
-      //
-    }
-
-    public void Set(string name, dynamic value)
-    {
-      //
-    }
-
-    public dynamic Get(string name)
-    {
-      return null;
-    }
-
     public void Print(dynamic value)
     {
       //
