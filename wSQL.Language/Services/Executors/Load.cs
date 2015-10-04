@@ -6,7 +6,7 @@ namespace wSQL.Language.Services.Executors
 {
   public class Load : BaseExecutor
   {
-    public override void Run(IList<Token> tokens, Context context)
+    public override dynamic Run(IList<Token> tokens, Context context)
     {
       ExpectTokens(tokens, 3);
 
@@ -14,7 +14,7 @@ namespace wSQL.Language.Services.Executors
         throw new Exception("Invalid syntax.");
 
       var rhs = GetValue(tokens[2], context);
-      context.Core.OpenPage(rhs.ToString());
+      return context.Core.OpenPage(rhs.ToString());
     }
   }
 }

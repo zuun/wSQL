@@ -5,12 +5,14 @@ namespace wSQL.Language.Services.Executors
 {
   public class Print : BaseExecutor
   {
-    public override void Run(IList<Token> tokens, Context context)
+    public override dynamic Run(IList<Token> tokens, Context context)
     {
       ExpectTokens(tokens, 1);
 
       var rhs = GetValue(tokens[1], context);
       context.Core.Print(rhs);
+
+      return null;
     }
   }
 }

@@ -20,17 +20,17 @@ namespace wSQL.Language.Services
       };
     }
 
-    public void Run(IList<Token> tokens, Context context)
+    public dynamic Run(IList<Token> tokens, Context context)
     {
       if (!tokens.Any())
-        return;
+        return null;
 
       var name = tokens[0].Value.ToUpperInvariant();
       if (!executors.ContainsKey(name))
         throw new Exception("Unknown statement: " + name);
 
       var executor = executors[name];
-      executor.Run(tokens, context);
+      return executor.Run(tokens, context);
     }
 
     //

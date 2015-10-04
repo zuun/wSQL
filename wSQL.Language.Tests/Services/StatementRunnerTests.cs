@@ -131,6 +131,23 @@ namespace wSQL.Language.Tests.Services
 
         A.CallTo(() => core.OpenPage("def")).MustHaveHappened();
       }
+
+      [TestMethod]
+      public void ReturnsValueFromCore()
+      {
+        var tokens = new[]
+        {
+          new Token(TokenType.Identifier, "load"),
+          new Token(TokenType.OpenPar, "("),
+          new Token(TokenType.String, "\"abc def\""),
+          new Token(TokenType.ClosedPar, ")"),
+        };
+        A.CallTo(() => core.OpenPage("abc def")).Returns("def");
+
+        var result = sut.Run(tokens, context);
+
+        Assert.AreEqual("def", result);
+      }
     }
 
     [TestClass]

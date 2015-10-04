@@ -7,7 +7,7 @@ namespace wSQL.Language.Services.Executors
 {
   public abstract class BaseExecutor : Executor
   {
-    public abstract void Run(IList<Token> tokens, Context context);
+    public abstract dynamic Run(IList<Token> tokens, Context context);
 
     //
 

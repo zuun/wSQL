@@ -6,7 +6,7 @@ namespace wSQL.Language.Services.Executors
 {
   public class Set : BaseExecutor
   {
-    public override void Run(IList<Token> tokens, Context context)
+    public override dynamic Run(IList<Token> tokens, Context context)
     {
       ExpectTokens(tokens, 3);
 
@@ -16,6 +16,8 @@ namespace wSQL.Language.Services.Executors
       var lhs = tokens[1].Value;
       var rhs = GetValue(tokens[3], context);
       context.Symbols.Set(lhs, rhs);
+
+      return null;
     }
   }
 }
