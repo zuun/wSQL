@@ -16,7 +16,20 @@ namespace wSQL.Language.Tests
     {
       var symbols = new SymbolsTable();
       var tokenizer = CreateLexer();
+      var executor = new StatementRunner();
+      var sut = new Interpreter(symbols, tokenizer, executor);
+      var core = A.Fake<WebCoreRepository>();
 
+      sut.Run(Resources.Sample1, core);
+
+      A.CallTo(() => core.Print("Hello, World")).MustHaveHappened();
+    }
+
+    [TestMethod]
+    public void CodeSample2()
+    {
+      var symbols = new SymbolsTable();
+      var tokenizer = CreateLexer();
       var executor = new StatementRunner();
       var sut = new Interpreter(symbols, tokenizer, executor);
       var core = A.Fake<WebCoreRepository>();
