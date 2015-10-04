@@ -1,7 +1,6 @@
 ﻿using FakeItEasy;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using wSQL.Business.Repository;
-using wSQL.Language.Contracts;
 using wSQL.Language.Services;
 using wSQL.Language.Tests.Properties;
 
@@ -14,8 +13,8 @@ namespace wSQL.Language.Tests
     public void CodeSample1()
     {
       var symbols = new SymbolsTable();
-      var tokenizer = A.Fake<Tokenizer>();
-      var executor = A.Fake<Executor>();
+      var tokenizer = new Lexer();
+      var executor = new StatementRunner();
       var sut = new Interpreter(symbols, tokenizer, executor);
       var core = A.Fake<WebCoreRepository>();
 

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using wSQL.Business.Repository;
 using wSQL.Language.Contracts;
@@ -33,30 +32,5 @@ namespace wSQL.Language.Services
     private readonly Symbols symbols;
     private readonly Tokenizer tokenizer;
     private readonly Executor executor;
-
-    private void InternalRun(IList<Token> tokens, WebCoreRepository core)
-    {
-      if (!tokens.Any())
-        return;
-
-      switch (tokens[0].Value.ToUpperInvariant())
-      {
-        case "DECLARE":
-          if (tokens.Count < 2)
-            throw new Exception("Missing variable name.");
-
-          foreach (var token in tokens.Skip(1))
-            symbols.Declare(token.Value);
-          break;
-
-        case "PRINT":
-          if (tokens.Count < 2)
-            throw new Exception("Missing variable name.");
-
-          var value = symbols.Get(tokens[1].Value);
-          core.Print(value);
-          break;
-      }
-    }
   }
 }
