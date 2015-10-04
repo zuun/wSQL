@@ -255,7 +255,7 @@ namespace wSQL.Language.Tests.Services
     }
 
     [TestClass]
-    public class Access : StatementRunnerTests
+    public class Accessor : StatementRunnerTests
     {
       [TestMethod]
       public void ReturnsValueOfProperty()
