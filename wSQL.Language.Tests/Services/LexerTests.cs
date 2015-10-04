@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Text.RegularExpressions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using wSQL.Language.Models;
 using wSQL.Language.Services;
@@ -14,12 +15,17 @@ namespace wSQL.Language.Tests.Services
     public void SetUp()
     {
       sut = new Lexer();
+
+      sut.AddDefinition(new TokenDefinition(TokenType.Identifier, false, new Regex("[A-Za-z_][A-Za-z0-9_]*")));
+      sut.AddDefinition(new TokenDefinition(TokenType.Separator, true, new Regex("[ ,]")));
+      sut.AddDefinition(new TokenDefinition(TokenType.Assignment, false, new Regex("[=]")));
+      sut.AddDefinition(new TokenDefinition(TokenType.String, false, new Regex("\"[^\"]*\"")));
     }
 
     [TestMethod]
     public void ReturnsSingleIdentifier()
     {
-      var result = sut.Parse("abc").ToList();
+      var result = sut.Parse("abc").ToArray();
 
       CollectionAssert.AreEqual(new[]
       {
@@ -31,7 +37,7 @@ namespace wSQL.Language.Tests.Services
     [TestMethod]
     public void ReturnsTwoIdentifiersSeparatedBySpace()
     {
-      var result = sut.Parse("a b").ToList();
+      var result = sut.Parse("a b").ToArray();
 
       CollectionAssert.AreEqual(new[]
       {
@@ -44,7 +50,7 @@ namespace wSQL.Language.Tests.Services
     [TestMethod]
     public void ReturnsMultipleIdentifiersSeparatedBySpaceAndComma()
     {
-      var result = sut.Parse("declare a,b,c").ToList();
+      var result = sut.Parse("declare a,b,c").ToArray();
 
       CollectionAssert.AreEqual(new[]
       {
@@ -52,6 +58,34 @@ namespace wSQL.Language.Tests.Services
         new Token(TokenType.Identifier, "a"),
         new Token(TokenType.Identifier, "b"),
         new Token(TokenType.Identifier, "c"),
+      },
+        result);
+    }
+
+    [TestMethod]
+    public void IdentifiesAssignment()
+    {
+      var result = sut.Parse("set a=b").ToArray();
+
+      CollectionAssert.AreEqual(new[]
+      {
+        new Token(TokenType.Identifier, "set"),
+        new Token(TokenType.Identifier, "a"),
+        new Token(TokenType.Assignment, "="),
+        new Token(TokenType.Identifier, "b"),
+      },
+        result);
+    }
+
+    [TestMethod]
+    public void IdentifiesStrings()
+    {
+      var result = sut.Parse("print \"abc def\"").ToArray();
+
+      CollectionAssert.AreEqual(new[]
+      {
+        new Token(TokenType.Identifier, "print"),
+        new Token(TokenType.String, "\"abc def\""),
       },
         result);
     }

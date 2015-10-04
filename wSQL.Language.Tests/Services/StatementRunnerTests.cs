@@ -80,6 +80,20 @@ namespace wSQL.Language.Tests.Services
 
         A.CallTo(() => core.Print("def")).MustHaveHappened();
       }
+
+      [TestMethod]
+      public void PrintsStringArgument()
+      {
+        var tokens = new[]
+        {
+          new Token(TokenType.Identifier, "print"),
+          new Token(TokenType.String, "\"abc def\""),
+        };
+
+        sut.Run(tokens, context);
+
+        A.CallTo(() => core.Print("abc def")).MustHaveHappened();
+      }
     }
   }
 }

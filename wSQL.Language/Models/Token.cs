@@ -21,7 +21,7 @@
     {
       unchecked
       {
-        return ((int) Type * 397) ^ (Value != null ? Value.GetHashCode() : 0);
+        return ((int) Type * 397) ^ (Value ?? "").GetHashCode();
       }
     }
   }

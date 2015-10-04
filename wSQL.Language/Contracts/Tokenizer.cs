@@ -5,6 +5,7 @@ namespace wSQL.Language.Contracts
 {
   public interface Tokenizer
   {
-    IEnumerable<Token> Parse(string s);
+    void AddDefinition(TokenDefinition tokenDefinition);
+    IEnumerable<Token> Parse(string source);
   }
 }

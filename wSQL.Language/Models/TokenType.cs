@@ -2,7 +2,9 @@
 {
   public enum TokenType
   {
-    None,
     Identifier,
+    Separator,
+    Assignment,
+    String,
   }
 }
