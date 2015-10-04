@@ -17,7 +17,7 @@ namespace wSQL.Language.Services
       {
         case "DECLARE":
           if (tokens.Count < 2)
-            throw new Exception("Missing variable name.");
+            throw new Exception("Missing argument(s).");
 
           foreach (var token in tokens.Skip(1))
             context.Symbols.Declare(token.Value);
@@ -25,12 +25,20 @@ namespace wSQL.Language.Services
 
         case "PRINT":
           if (tokens.Count < 2)
-            throw new Exception("Missing variable name.");
+            throw new Exception("Missing argument(s).");
 
-          var value = context.Symbols.Get(tokens[1].Value);
+          var argument = tokens[1];
+          var value = argument.Type == "identifier" ? context.Symbols.Get(argument.Value) : Unquote(argument.Value);
           context.Core.Print(value);
           break;
       }
+    }
+
+    //
+
+    private static string Unquote(string s)
+    {
+      return s.Substring(1, s.Length - 2);
     }
   }
 }
