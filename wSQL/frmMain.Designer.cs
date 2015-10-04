@@ -51,8 +51,14 @@
          this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
          this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
          this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+         this.tabPage1 = new System.Windows.Forms.TabPage();
+         this.splitContainer1 = new System.Windows.Forms.SplitContainer();
          this.panel3.SuspendLayout();
+         this.tabContainer.SuspendLayout();
          this.mainMenu.SuspendLayout();
+         this.tabPage1.SuspendLayout();
+         ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
+         this.splitContainer1.SuspendLayout();
          this.SuspendLayout();
          // 
          // statusStrip1
@@ -82,6 +88,7 @@
          // 
          // tabContainer
          // 
+         this.tabContainer.Controls.Add(this.tabPage1);
          this.tabContainer.Dock = System.Windows.Forms.DockStyle.Fill;
          this.tabContainer.Location = new System.Drawing.Point(0, 0);
          this.tabContainer.Name = "tabContainer";
@@ -231,6 +238,26 @@
          // 
          this.openFileDialog1.FileName = "openFileDialog1";
          // 
+         // tabPage1
+         // 
+         this.tabPage1.Controls.Add(this.splitContainer1);
+         this.tabPage1.Location = new System.Drawing.Point(4, 22);
+         this.tabPage1.Name = "tabPage1";
+         this.tabPage1.Size = new System.Drawing.Size(934, 395);
+         this.tabPage1.TabIndex = 0;
+         this.tabPage1.Text = "tabPage1";
+         this.tabPage1.UseVisualStyleBackColor = true;
+         // 
+         // splitContainer1
+         // 
+         this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+         this.splitContainer1.Location = new System.Drawing.Point(0, 0);
+         this.splitContainer1.Name = "splitContainer1";
+         this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
+         this.splitContainer1.Size = new System.Drawing.Size(934, 395);
+         this.splitContainer1.SplitterDistance = 311;
+         this.splitContainer1.TabIndex = 0;
+         // 
          // frmMain
          // 
          this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -244,8 +271,12 @@
          this.Name = "frmMain";
          this.Text = "Form1";
          this.panel3.ResumeLayout(false);
+         this.tabContainer.ResumeLayout(false);
          this.mainMenu.ResumeLayout(false);
          this.mainMenu.PerformLayout();
+         this.tabPage1.ResumeLayout(false);
+         ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
+         this.splitContainer1.ResumeLayout(false);
          this.ResumeLayout(false);
          this.PerformLayout();
 
@@ -276,6 +307,8 @@
       private System.Windows.Forms.ToolStripMenuItem runScriptToolStripMenuItem;
       private System.Windows.Forms.ToolStripSeparator toolStripMenuItem5;
       private System.Windows.Forms.OpenFileDialog openFileDialog1;
+      private System.Windows.Forms.TabPage tabPage1;
+      private System.Windows.Forms.SplitContainer splitContainer1;
    }
 }
 

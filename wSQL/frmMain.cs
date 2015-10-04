@@ -14,6 +14,8 @@ using wSQL.Business.Repository;
 using wSQL.Business.Services;
 using wSQL.Data.Models;
 using wSQL.Library;
+using wSQL.Controls;
+using wSQL.Models;
 
 namespace wSQL
 {
@@ -21,8 +23,11 @@ namespace wSQL
    {
       private RuntimeCoreRepository runtimeCore;
 
+
+      private Dictionary<string, LanguageToolTip> documentToolTips;
+      string[] keywords = { "declare", "set" };
       //string[] snippets = { "if(^)\n{\n;\n}", "if(^)\n{\n;\n}\nelse\n{\n;\n}", "for(^;;)\n{\n;\n}", "while(^)\n{\n;\n}", "do\n{\n^;\n}while();", "switch(^)\n{\ncase : break;\n}" };
-      string[] snippets = { "load (\"^\")", "find( ^, \"\")", "map ( ^, )", "flatten( ^ )"};
+      string[] snippets = { "load (\"^\")", "find( ^, \"\")", "map ( ^, )", "flatten( ^ )", "print ^"};
 
       public frmMain()
       {
@@ -30,7 +35,16 @@ namespace wSQL
 
          runtimeCore = new RuntimeCore();
 
+         initDocumentToolTips();
          createNewFile();
+      }
+
+      private void initDocumentToolTips()
+      {
+         documentToolTips = new Dictionary<string, LanguageToolTip>();
+         documentToolTips.Add("declare", new LanguageToolTip("declare [variable name], [variable name]", "declare valiable to be available in the script"));
+         documentToolTips.Add("set", new LanguageToolTip("set [variable] = [value]", "Set a variable value"));
+         documentToolTips.Add("load", new LanguageToolTip("load (\"[url]\")", "Loads the page content from the provided url"));
       }
 
       #region editor
@@ -44,8 +58,8 @@ namespace wSQL
          //   items.Add(new DeclarationSnippet(item) { ImageIndex = 0 });
          //foreach (var item in methods)
          //   items.Add(new MethodAutocompleteItem(item) { ImageIndex = 2 });
-         //foreach (var item in keywords)
-         //   items.Add(new AutocompleteItem(item));
+         foreach (var item in keywords)
+            items.Add(new AutocompleteItem(item));
 
          //items.Add(new InsertSpaceSnippet());
          //items.Add(new InsertSpaceSnippet(@"^(\w+)([=<>!:]+)(\w+)$"));
@@ -78,14 +92,14 @@ namespace wSQL
       {
          get
          {
-            if (tabContainer.SelectedTab == null)
-               return null;
-            return (tabContainer.SelectedTab.Controls[0] as FastColoredTextBox);
+            return tabContainer.GetActiveEditor();
          }
 
          set
          {
             //tsFiles.SelectedItem = (value.Parent as FATabStripItem);
+            tabContainer.SelectedTab = value.Parent as TabPage;
+            value.BringToFront();
             value.Focus();
          }
       }
@@ -95,11 +109,9 @@ namespace wSQL
       private void updateTab(TabPage page)
       {
          if (page == null) page = tabContainer.SelectedTab;
-         var info = page.Tag as FileDetails;
+         var info = page.GetFileDetails();
          if (info != null)
-         {
             page.Text = info.Saved ? info.FileName : info.FileName + "*";
-         }
       }
       #endregion
 
@@ -110,15 +122,31 @@ namespace wSQL
          TabPage newPage = new TabPage(name);
          tabContainer.TabPages.Add(newPage);
 
+         SplitContainer container = new SplitContainer();
+         container.Orientation = Orientation.Horizontal;
+         container.Dock = DockStyle.Fill;
+         newPage.Controls.Add(container);
+         
+
+         //create output console
+         OutputConsole console = new OutputConsole();
+         console.Name = "outputConsole";
+         console.Dock = DockStyle.Fill;
+         container.Panel2.Controls.Add(console);
+         container.Panel2Collapsed = true;
+
          //create new editor
          var newEditor = new FastColoredTextBox();
+         newEditor.Name = "mainEditor";
          newEditor.DelayedTextChangedInterval = 1000;
          newEditor.DelayedEventsInterval = 500;
          newEditor.Language = Language.wQL;
          //newEditor.TextChangedDelayed += new EventHandler<TextChangedEventArgs>(editor_TextChangedDelayed);
          newEditor.TextChanged += new EventHandler<TextChangedEventArgs>(editor_TextChangedDelayed);
+         newEditor.ToolTipNeeded += NewEditor_ToolTipNeeded;
          newEditor.Name = ProjectConstants.EditorControlName;
-         newPage.Controls.Add(newEditor);
+         container.Panel1.Controls.Add(newEditor);
+         //newPage.Controls.Add(newEditor);
          newEditor.Dock = DockStyle.Fill;
 
          AutocompleteMenu popupMenu = new AutocompleteMenu(newEditor);
@@ -126,8 +154,7 @@ namespace wSQL
          popupMenu.Opening += new EventHandler<CancelEventArgs>(popupMenu_Opening);
          BuildAutocompleteMenu(popupMenu);
          newEditor.Tag= popupMenu;
-
-
+         
          tabContainer.SelectedTab = newPage;
          
          //create the details for the file
@@ -147,6 +174,30 @@ namespace wSQL
          newEditor.Focus();
 
          return newPage;
+      }
+
+      private void NewEditor_ToolTipNeeded(object sender, ToolTipNeededEventArgs e)
+      {
+         if (!string.IsNullOrEmpty(e.HoveredWord))
+         {
+            if (documentToolTips.ContainsKey(e.HoveredWord))
+            {
+               var info = documentToolTips[e.HoveredWord];
+               e.ToolTipTitle = info.Title;
+               e.ToolTipText = info.Text;
+            }
+         }
+
+         /*
+          * Also you can get any fragment of the text for tooltip.
+          * Following example gets whole line for tooltip:
+
+         var range = new Range(sender as FastColoredTextBox, e.Place, e.Place);
+         string hoveredWord = range.GetFragment("[^\n]").Text;
+         e.ToolTipTitle = hoveredWord;
+         e.ToolTipText = "This is tooltip for '" + hoveredWord + "'";
+
+          */
       }
 
       private void editor_TextChangedDelayed(object sender, TextChangedEventArgs e)
@@ -174,9 +225,12 @@ namespace wSQL
       
       private void openFile(string fileName)
       {
+         if (tabContainer.TabCount == 1 && tabContainer.GetActiveEditor().Text == "")
+            closeActiveFile();
+
          var tabPage = createNewContainet(Path.GetFileName(fileName), fileName, true);
-         (tabPage.Controls[0] as FastColoredTextBox).OpenFile(fileName);
-         (tabPage.Tag as FileDetails).Saved = true;
+         tabPage.GetEditor().OpenFile(fileName);
+         tabPage.GetFileDetails().Saved = true;
          updateTab(tabPage);
       }
 
@@ -184,10 +238,10 @@ namespace wSQL
       {
          if (tabContainer.SelectedTab != null)
          {
-            var info = tabContainer.SelectedTab.Tag as FileDetails;
+            var info = tabContainer.SelectedTab.GetFileDetails();
             if (info != null)
             {
-               if (!info.Saved) saveActiveFile();
+               if (!info.Saved && tabContainer.GetActiveEditor().Text != "" ) saveActiveFile();
 
                tabContainer.TabPages.Remove(tabContainer.SelectedTab);
             }
@@ -198,15 +252,15 @@ namespace wSQL
       {
          if (tabContainer.SelectedTab != null)
          {
-            var info = tabContainer.SelectedTab.Tag as FileDetails;
+            var info = tabContainer.SelectedTab.GetFileDetails();
             if (info.FullPath == null || info.FullPath.Trim() == "")
                saveActiveFileAs();
             else
             {
-               var editor = tabContainer.SelectedTab.Controls.Find(ProjectConstants.EditorControlName, true).FirstOrDefault();
+               var editor = tabContainer.SelectedTab.GetEditor();
                if (editor != null)
                {
-                  ((FastColoredTextBox)editor).SaveToFile(info.FullPath, Encoding.ASCII);
+                  editor.SaveToFile(info.FullPath, Encoding.ASCII);
                   info.Saved = true;
                   updateTab(null);
                }
@@ -219,7 +273,7 @@ namespace wSQL
          //TODO: save as
          if (tabContainer.SelectedTab != null)
          {
-            var info = tabContainer.SelectedTab.Tag as FileDetails;
+            var info = tabContainer.SelectedTab.GetFileDetails();
             saveFileDialog1.DefaultExt = ProjectConstants.SourceFileExtension;
             saveFileDialog1.Filter = ProjectConstants.ApplicationName + "|*." + ProjectConstants.SourceFileExtension + "|Text file|*.txt";
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
@@ -227,10 +281,10 @@ namespace wSQL
                info.FullPath = saveFileDialog1.FileName;
                info.FileName = Path.GetFileName(info.FullPath);
 
-               var editor = tabContainer.SelectedTab.Controls.Find(ProjectConstants.EditorControlName, true).FirstOrDefault();
+               var editor = tabContainer.SelectedTab.GetEditor();
                if (editor != null)
                {
-                  ((FastColoredTextBox)editor).SaveToFile(info.FullPath, Encoding.ASCII);
+                  editor.SaveToFile(info.FullPath, Encoding.ASCII);
                   info.Saved = true;
                   updateTab(null);
                }
@@ -282,11 +336,13 @@ namespace wSQL
 
       private void runScriptToolStripMenuItem_Click(object sender, EventArgs e)
       {
-         var response = runtimeCore.RunScript(CurrentTB.Text);
+         var response = runtimeCore.RunScript(tabContainer.GetActiveEditor().Text);
 
          if (((dynamic)response).PageContent != null)
          {
-            //enable vhiw for page content
+            //enable view for page content
+            var console = tabContainer.GetActiveOutputConsole();
+            console.PageContent = ((dynamic)response).PageContent;
          }
       }
 
