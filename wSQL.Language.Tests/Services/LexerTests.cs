@@ -28,7 +28,6 @@ namespace wSQL.Language.Tests.Services
       CollectionAssert.AreEqual(new[]
       {
         new Token("identifier", "abc"),
-        Token.EOF,
       },
         result);
     }
@@ -42,7 +41,6 @@ namespace wSQL.Language.Tests.Services
       {
         new Token("identifier", "a"),
         new Token("identifier", "b"),
-        Token.EOF,
       },
         result);
     }
@@ -58,7 +56,6 @@ namespace wSQL.Language.Tests.Services
         new Token("identifier", "a"),
         new Token("identifier", "b"),
         new Token("identifier", "c"),
-        Token.EOF,
       },
         result);
     }

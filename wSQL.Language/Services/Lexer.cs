@@ -38,8 +38,6 @@ namespace wSQL.Language.Services
 
         currentIndex += matchLength;
       }
-
-      yield return Token.EOF;
     }
 
     //

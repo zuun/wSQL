@@ -2,9 +2,6 @@
 {
   public class Token
   {
-    // ReSharper disable once InconsistentNaming
-    public static Token EOF = new Token("(end)", null);
-
     public string Type { get; private set; }
     public string Value { get; private set; }
 

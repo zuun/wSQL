@@ -1,6 +1,8 @@
-﻿using FakeItEasy;
+﻿using System.Text.RegularExpressions;
+using FakeItEasy;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using wSQL.Business.Repository;
+using wSQL.Language.Models;
 using wSQL.Language.Services;
 using wSQL.Language.Tests.Properties;
 
@@ -13,7 +15,8 @@ namespace wSQL.Language.Tests
     public void CodeSample1()
     {
       var symbols = new SymbolsTable();
-      var tokenizer = new Lexer();
+      var tokenizer = CreateLexer();
+
       var executor = new StatementRunner();
       var sut = new Interpreter(symbols, tokenizer, executor);
       var core = A.Fake<WebCoreRepository>();
@@ -25,6 +28,18 @@ namespace wSQL.Language.Tests
       A.CallTo(() => core.Find(A<string>.Ignored, "//div[class='srg']/div[class='g pb']")).MustHaveHappened();
       A.CallTo(() => core.Find(A<string>.Ignored, "div[class='st']"));
       A.CallTo(() => core.Print(A<object>.Ignored)).MustHaveHappened();
+    }
+
+    //
+
+    private static Lexer CreateLexer()
+    {
+      var tokenizer = new Lexer();
+      tokenizer.AddDefinition(new TokenDefinition("identifier", false, new Regex("[A-Za-z_][A-Za-z0-9_]*")));
+      tokenizer.AddDefinition(new TokenDefinition("separator", true, new Regex("[ ,]")));
+      tokenizer.AddDefinition(new TokenDefinition("assignment", true, new Regex("[=]")));
+
+      return tokenizer;
     }
   }
 }
