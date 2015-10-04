@@ -10,6 +10,6 @@ namespace wSQL.Business.Repository
    public interface RuntimeCoreRepository
    {
 
-      DynamicObject RunScript(string script);
+      dynamic RunScript(string script);
    }
 }

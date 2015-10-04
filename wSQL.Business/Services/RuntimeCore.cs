@@ -12,7 +12,7 @@ namespace wSQL.Business.Services
          webCore = new WebCore();
       }
 
-      public DynamicObject RunScript(string script)
+      public dynamic RunScript(string script)
       {
          //TODO: validate script
          //parse escript
