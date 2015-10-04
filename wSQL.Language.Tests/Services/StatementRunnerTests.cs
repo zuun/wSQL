@@ -231,5 +231,33 @@ namespace wSQL.Language.Tests.Services
         A.CallTo(() => core.Find("abc", "//div")).MustHaveHappened();
       }
     }
+
+    [TestClass]
+    public class Flatten : StatementRunnerTests
+    {
+      [TestMethod]
+      public void FlattensListOfLists()
+      {
+        var tokens = new[]
+        {
+          new Token(TokenType.Identifier, "flatten"),
+          new Token(TokenType.OpenPar, "("),
+          new Token(TokenType.Identifier, "a"),
+          new Token(TokenType.ClosedPar, ")"),
+        };
+        A.CallTo(() => symbols.Exists("a")).Returns(true);
+        A.CallTo(() => symbols.Get("a")).Returns(new[] {new[] {1, 2}, new[] {3, 4}, new[] {5, 6},});
+
+        var result = sut.Run(tokens, context);
+
+        CollectionAssert.AreEqual(new[] {1, 2, 3, 4, 5, 6}, result);
+      }
+    }
+
+    [TestClass]
+    public class Lambda : StatementRunnerTests
+    {
+      //
+    }
   }
 }

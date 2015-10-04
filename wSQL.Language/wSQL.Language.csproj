@@ -50,6 +50,7 @@
     <Compile Include="Services\Executors\BaseExecutor.cs" />
     <Compile Include="Services\Executors\Declare.cs" />
     <Compile Include="Services\Executors\Find.cs" />
+    <Compile Include="Services\Executors\Flatten.cs" />
     <Compile Include="Services\Executors\Load.cs" />
     <Compile Include="Services\Executors\Print.cs" />
     <Compile Include="Services\Executors\Set.cs" />
