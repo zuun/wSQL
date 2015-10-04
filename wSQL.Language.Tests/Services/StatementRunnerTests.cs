@@ -112,7 +112,7 @@ namespace wSQL.Language.Tests.Services
 
         sut.Run(tokens, context);
 
-        A.CallTo(() => core.Load("abc def")).MustHaveHappened();
+        A.CallTo(() => core.OpenPage("abc def")).MustHaveHappened();
       }
 
       [TestMethod]
@@ -129,7 +129,7 @@ namespace wSQL.Language.Tests.Services
 
         sut.Run(tokens, context);
 
-        A.CallTo(() => core.Load("def")).MustHaveHappened();
+        A.CallTo(() => core.OpenPage("def")).MustHaveHappened();
       }
     }
   }

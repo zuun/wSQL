@@ -28,11 +28,6 @@ namespace wSQL.Business.Services
       }
     }
 
-    public string Load(string url)
-    {
-      return "";
-    }
-
     public void Print(dynamic value)
     {
       //

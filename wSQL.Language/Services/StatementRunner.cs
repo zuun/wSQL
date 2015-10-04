@@ -33,7 +33,7 @@ namespace wSQL.Language.Services
           if (tokens[1].Type != TokenType.OpenPar || tokens[3].Type != TokenType.ClosedPar)
             throw new Exception("Invalid syntax.");
 
-          context.Core.Load(GetValue(tokens[2], context).ToString());
+          context.Core.OpenPage(GetValue(tokens[2], context).ToString());
           break;
       }
     }

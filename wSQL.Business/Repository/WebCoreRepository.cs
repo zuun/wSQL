@@ -5,8 +5,6 @@
     string OpenPage(string url);
     string OpenPage(string url, string loginPage, string userName, string password);
 
-    string Load(string url);
-    
     void Print(dynamic value);
     dynamic Find(string value, string xpath);
   }
