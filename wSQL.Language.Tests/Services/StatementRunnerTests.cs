@@ -255,6 +255,26 @@ namespace wSQL.Language.Tests.Services
     }
 
     [TestClass]
+    public class Access : StatementRunnerTests
+    {
+      [TestMethod]
+      public void ReturnsValueOfProperty()
+      {
+        var tokens = new[]
+        {
+          new Token(TokenType.Access, "."),
+          new Token(TokenType.Identifier, "b"),
+        };
+        A.CallTo(() => symbols.Exists("$")).Returns(true);
+        A.CallTo(() => symbols.Get("$")).Returns(new {b = "cde"});
+
+        var result = sut.Run(tokens, context);
+
+        Assert.AreEqual("cde", result);
+      }
+    }
+
+    [TestClass]
     public class Lambda : StatementRunnerTests
     {
       //
