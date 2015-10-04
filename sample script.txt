@@ -1,0 +1,53 @@
+*** Source program
+
+declare page, list, descriptionNodes, descriptions
+
+set page = load "https://www.google.com/search?q=something+to+search&cad=cbv&sei=drQPVuWtDoS7acCjptgG"
+print page
+set list = find(page, "//div[class='srg']/div[class='g pb']")
+set descriptionNodes = flatten(map(list, it => find(it.InnerHtml, "div[class='st']")))
+set descriptions = map(descriptionNodes, it => it.InnerText)
+print descriptions
+
+
+
+
+bool Run(string script, Core core);
+
+
+*** Result of interpreting the source program
+
+// declare page, list, descriptionNodes, descriptions
+Declare("page");
+Declare("list");
+Declare("descriptionNodes");
+Declare("descriptions");
+
+// set page = load "https://www.google.com/search?q=something+to+search&cad=cbv&sei=drQPVuWtDoS7acCjptgG"
+var temp1 = core.OpenPage("https://www.google.com/search?q=something+to+search&cad=cbv&sei=drQPVuWtDoS7acCjptgG");
+Set("page", temp1);
+
+// print page
+var temp2 = Get("page");
+core.Print(temp2);
+
+// set list = find(page, "//div[class='srg']/div[class='g pb']");
+var temp3 = Get("page");
+var temp4 = core.Find(temp3, "//div[class='srg']/div[class='g pb']");
+Set("list", temp4);
+
+// set descriptionNodes = flatten(map(list, it => find(it.InnerHtml, "div[class='st']")));
+var temp5 = Get("list");
+var temp6 = temp5.Select(it => core.Find(it.InnerHtml, "div[class='st']"));
+var temp7 = temp6.Select(it => it);
+Set("descriptionNodes", temp7);
+
+// set descriptions = map(descriptionNodes, it => it.InnerText);
+var temp8 = Get("descriptionNodes");
+var temp9 = temp8.Select(it => it.InnerText);
+Set("descriptions", temp9);
+
+// print descriptions
+var temp10 = Get("descriptions");
+core.Print(temp10);
+

@@ -40,8 +40,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Interpreter.cs" />
+    <Compile Include="Contracts\Executor.cs" />
+    <Compile Include="Contracts\Symbols.cs" />
+    <Compile Include="Contracts\Tokenizer.cs" />
+    <Compile Include="Models\Context.cs" />
+    <Compile Include="Models\Token.cs" />
+    <Compile Include="Models\TokenType.cs" />
+    <Compile Include="Services\Interpreter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\Lexer.cs" />
+    <Compile Include="Services\StatementRunner.cs" />
+    <Compile Include="Services\SymbolsTable.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\wSQL.Business\wSQL.Business.csproj">
@@ -49,6 +58,7 @@
       <Name>wSQL.Business</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
