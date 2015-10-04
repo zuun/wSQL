@@ -37,7 +37,8 @@ namespace wSQL.Language.Tests
       var tokenizer = new Lexer();
       tokenizer.AddDefinition(new TokenDefinition("identifier", false, new Regex("[A-Za-z_][A-Za-z0-9_]*")));
       tokenizer.AddDefinition(new TokenDefinition("separator", true, new Regex("[ ,]")));
-      tokenizer.AddDefinition(new TokenDefinition("assignment", true, new Regex("[=]")));
+      tokenizer.AddDefinition(new TokenDefinition("assignment", false, new Regex("[=]")));
+      tokenizer.AddDefinition(new TokenDefinition("string", false, new Regex("\"[^\"]*\"")));
 
       return tokenizer;
     }
