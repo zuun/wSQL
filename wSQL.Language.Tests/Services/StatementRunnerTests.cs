@@ -151,6 +151,23 @@ namespace wSQL.Language.Tests.Services
 
         A.CallTo(() => symbols.Set("a", "abc")).MustHaveHappened();
       }
+
+      [TestMethod]
+      public void SetsVariableToAnotherVariable()
+      {
+        var tokens = new[]
+        {
+          new Token(TokenType.Identifier, "set"),
+          new Token(TokenType.Identifier, "a"),
+          new Token(TokenType.Assignment, "="),
+          new Token(TokenType.Identifier, "b"),
+        };
+        A.CallTo(() => symbols.Get("b")).Returns("def");
+
+        sut.Run(tokens, context);
+
+        A.CallTo(() => symbols.Set("a", "def")).MustHaveHappened();
+      }
     }
   }
 }

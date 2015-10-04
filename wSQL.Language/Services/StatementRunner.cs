@@ -34,6 +34,7 @@ namespace wSQL.Language.Services
 
         case "LOAD":
           ExpectTokens(tokens, 3);
+
           if (tokens[1].Type != TokenType.OpenPar || tokens[3].Type != TokenType.ClosedPar)
             throw new Exception("Invalid syntax.");
 
@@ -43,6 +44,7 @@ namespace wSQL.Language.Services
 
         case "SET":
           ExpectTokens(tokens, 3);
+          
           if (tokens[2].Type != TokenType.Assignment)
             throw new Exception("Invalid syntax.");
 
