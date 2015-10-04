@@ -10,9 +10,10 @@ namespace wSQL.Language.Services
 {
   public class Interpreter
   {
-    public Interpreter(Symbols symbols)
+    public Interpreter(Symbols symbols, Tokenizer tokenizer)
     {
       this.symbols = symbols;
+      this.tokenizer = tokenizer;
     }
 
     public void Run(string script, WebCoreRepository core)
@@ -20,7 +21,7 @@ namespace wSQL.Language.Services
       var lines = script.Split(new[] {Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries);
       foreach (var line in lines)
       {
-        var tokens = Parse(line).ToList();
+        var tokens = tokenizer.Parse(line).ToList();
         if (!tokens.Any())
           continue;
 
@@ -48,6 +49,7 @@ namespace wSQL.Language.Services
     //
 
     private readonly Symbols symbols;
+    private readonly Tokenizer tokenizer;
 
     private static IEnumerable<Token> Parse(string line)
     {

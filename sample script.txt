@@ -5,7 +5,7 @@ declare page, list, descriptionNodes, descriptions
 page = load "https://www.google.com/search?q=something+to+search&cad=cbv&sei=drQPVuWtDoS7acCjptgG"
 print page
 list = find(page, "//div[class='srg']/div[class='g pb']")
-descriptionNodes = flatten(map(list, it => find(it, "div[class='st']")))
+descriptionNodes = flatten(map(list, it => find(it.InnerHtml, "div[class='st']")))
 descriptions = map(descriptionNodes, it => it.InnerText)
 print descriptions
 
@@ -36,9 +36,9 @@ var temp3 = Get("page");
 var temp4 = core.Find(temp3, "//div[class='srg']/div[class='g pb']");
 Set("list", temp4);
 
-// descriptionNodes = flatten(map(list, it => find(it, "div[class='st']")));
+// descriptionNodes = flatten(map(list, it => find(it.InnerHtml, "div[class='st']")));
 var temp5 = Get("list");
-var temp6 = temp5.Select(it => core.Find(it, "div[class='st']"));
+var temp6 = temp5.Select(it => core.Find(it.InnerHtml, "div[class='st']"));
 var temp7 = temp6.Select(it => it);
 Set("descriptionNodes", temp7);
 
