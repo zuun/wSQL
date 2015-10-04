@@ -16,10 +16,10 @@ namespace wSQL.Language.Tests.Services
     {
       sut = new Lexer();
 
-      sut.AddDefinition(new TokenDefinition("identifier", false, new Regex("[A-Za-z_][A-Za-z0-9_]*")));
-      sut.AddDefinition(new TokenDefinition("separator", true, new Regex("[ ,]")));
-      sut.AddDefinition(new TokenDefinition("assignment", false, new Regex("[=]")));
-      sut.AddDefinition(new TokenDefinition("string", false, new Regex("\"[^\"]*\"")));
+      sut.AddDefinition(new TokenDefinition(TokenType.Identifier, false, new Regex("[A-Za-z_][A-Za-z0-9_]*")));
+      sut.AddDefinition(new TokenDefinition(TokenType.Separator, true, new Regex("[ ,]")));
+      sut.AddDefinition(new TokenDefinition(TokenType.Assignment, false, new Regex("[=]")));
+      sut.AddDefinition(new TokenDefinition(TokenType.String, false, new Regex("\"[^\"]*\"")));
     }
 
     [TestMethod]
@@ -29,7 +29,7 @@ namespace wSQL.Language.Tests.Services
 
       CollectionAssert.AreEqual(new[]
       {
-        new Token("identifier", "abc"),
+        new Token(TokenType.Identifier, "abc"),
       },
         result);
     }
@@ -41,8 +41,8 @@ namespace wSQL.Language.Tests.Services
 
       CollectionAssert.AreEqual(new[]
       {
-        new Token("identifier", "a"),
-        new Token("identifier", "b"),
+        new Token(TokenType.Identifier, "a"),
+        new Token(TokenType.Identifier, "b"),
       },
         result);
     }
@@ -54,10 +54,10 @@ namespace wSQL.Language.Tests.Services
 
       CollectionAssert.AreEqual(new[]
       {
-        new Token("identifier", "declare"),
-        new Token("identifier", "a"),
-        new Token("identifier", "b"),
-        new Token("identifier", "c"),
+        new Token(TokenType.Identifier, "declare"),
+        new Token(TokenType.Identifier, "a"),
+        new Token(TokenType.Identifier, "b"),
+        new Token(TokenType.Identifier, "c"),
       },
         result);
     }
@@ -69,10 +69,10 @@ namespace wSQL.Language.Tests.Services
 
       CollectionAssert.AreEqual(new[]
       {
-        new Token("identifier", "set"),
-        new Token("identifier", "a"),
-        new Token("assignment", "="),
-        new Token("identifier", "b"),
+        new Token(TokenType.Identifier, "set"),
+        new Token(TokenType.Identifier, "a"),
+        new Token(TokenType.Assignment, "="),
+        new Token(TokenType.Identifier, "b"),
       },
         result);
     }
@@ -84,8 +84,8 @@ namespace wSQL.Language.Tests.Services
 
       CollectionAssert.AreEqual(new[]
       {
-        new Token("identifier", "print"),
-        new Token("string", "\"abc def\""),
+        new Token(TokenType.Identifier, "print"),
+        new Token(TokenType.String, "\"abc def\""),
       },
         result);
     }

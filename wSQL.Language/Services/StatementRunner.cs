@@ -28,7 +28,7 @@ namespace wSQL.Language.Services
             throw new Exception("Missing argument(s).");
 
           var argument = tokens[1];
-          var value = argument.Type == "identifier" ? context.Symbols.Get(argument.Value) : Unquote(argument.Value);
+          var value = argument.Type == TokenType.Identifier ? context.Symbols.Get(argument.Value) : Unquote(argument.Value);
           context.Core.Print(value);
           break;
       }

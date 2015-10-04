@@ -46,6 +46,7 @@
     <Compile Include="Contracts\Tokenizer.cs" />
     <Compile Include="Models\Context.cs" />
     <Compile Include="Models\Token.cs" />
+    <Compile Include="Models\TokenType.cs" />
     <Compile Include="Services\Interpreter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Lexer.cs" />
