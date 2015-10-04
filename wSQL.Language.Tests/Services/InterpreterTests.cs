@@ -5,7 +5,7 @@ using wSQL.Language.Contracts;
 using wSQL.Language.Models;
 using wSQL.Language.Services;
 
-namespace wSQL.Language.Tests
+namespace wSQL.Language.Tests.Services
 {
   [TestClass]
   public class InterpreterTests

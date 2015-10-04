@@ -46,6 +46,7 @@
     <Compile Include="Models\TokenType.cs" />
     <Compile Include="Services\Interpreter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\Lexer.cs" />
     <Compile Include="Services\SymbolsTable.cs" />
   </ItemGroup>
   <ItemGroup>
