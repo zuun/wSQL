@@ -6,5 +6,7 @@
     Separator,
     Assignment,
     String,
+    OpenPar,
+    ClosedPar,
   }
 }

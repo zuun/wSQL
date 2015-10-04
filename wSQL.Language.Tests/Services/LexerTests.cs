@@ -20,6 +20,8 @@ namespace wSQL.Language.Tests.Services
       sut.AddDefinition(new TokenDefinition(TokenType.Separator, true, new Regex("[ ,]")));
       sut.AddDefinition(new TokenDefinition(TokenType.Assignment, false, new Regex("[=]")));
       sut.AddDefinition(new TokenDefinition(TokenType.String, false, new Regex("\"[^\"]*\"")));
+      sut.AddDefinition(new TokenDefinition(TokenType.OpenPar, false, new Regex("[(]")));
+      sut.AddDefinition(new TokenDefinition(TokenType.ClosedPar, false, new Regex("[)]")));
     }
 
     [TestMethod]
@@ -86,6 +88,21 @@ namespace wSQL.Language.Tests.Services
       {
         new Token(TokenType.Identifier, "print"),
         new Token(TokenType.String, "\"abc def\""),
+      },
+        result);
+    }
+
+    [TestMethod]
+    public void IdentifiesParentheses()
+    {
+      var result = sut.Parse("load(\"abc def\")").ToArray();
+
+      CollectionAssert.AreEqual(new[]
+      {
+        new Token(TokenType.Identifier, "load"),
+        new Token(TokenType.OpenPar, "("),
+        new Token(TokenType.String, "\"abc def\""),
+        new Token(TokenType.ClosedPar, ")"),
       },
         result);
     }

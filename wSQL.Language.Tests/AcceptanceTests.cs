@@ -39,6 +39,8 @@ namespace wSQL.Language.Tests
       tokenizer.AddDefinition(new TokenDefinition(TokenType.Separator, true, new Regex("[ ,]")));
       tokenizer.AddDefinition(new TokenDefinition(TokenType.Assignment, false, new Regex("[=]")));
       tokenizer.AddDefinition(new TokenDefinition(TokenType.String, false, new Regex("\"[^\"]*\"")));
+      tokenizer.AddDefinition(new TokenDefinition(TokenType.OpenPar, false, new Regex("[(]")));
+      tokenizer.AddDefinition(new TokenDefinition(TokenType.ClosedPar, false, new Regex("[)]")));
 
       return tokenizer;
     }
