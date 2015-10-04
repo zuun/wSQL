@@ -2,7 +2,7 @@
 
 declare page, list, descriptionNodes, descriptions
 
-set page = load "https://www.google.com/search?q=something+to+search&cad=cbv&sei=drQPVuWtDoS7acCjptgG"
+set page = load("https://www.google.com/search?q=something+to+search&cad=cbv&sei=drQPVuWtDoS7acCjptgG")
 print page
 set list = find(page, "//div[class='srg']/div[class='g pb']")
 set descriptionNodes = flatten(map(list, it => find(it.InnerHtml, "div[class='st']")))
@@ -23,7 +23,7 @@ Declare("list");
 Declare("descriptionNodes");
 Declare("descriptions");
 
-// set page = load "https://www.google.com/search?q=something+to+search&cad=cbv&sei=drQPVuWtDoS7acCjptgG"
+// set page = load("https://www.google.com/search?q=something+to+search&cad=cbv&sei=drQPVuWtDoS7acCjptgG")
 var temp1 = core.OpenPage("https://www.google.com/search?q=something+to+search&cad=cbv&sei=drQPVuWtDoS7acCjptgG");
 Set("page", temp1);
 
