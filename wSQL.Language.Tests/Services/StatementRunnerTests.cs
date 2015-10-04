@@ -132,5 +132,25 @@ namespace wSQL.Language.Tests.Services
         A.CallTo(() => core.OpenPage("def")).MustHaveHappened();
       }
     }
+
+    [TestClass]
+    public class Set : StatementRunnerTests
+    {
+      [TestMethod]
+      public void SetsVariableToConstantValue()
+      {
+        var tokens = new[]
+        {
+          new Token(TokenType.Identifier, "set"),
+          new Token(TokenType.Identifier, "a"),
+          new Token(TokenType.Assignment, "="),
+          new Token(TokenType.String, "\"abc\""),
+        };
+
+        sut.Run(tokens, context);
+
+        A.CallTo(() => symbols.Set("a", "abc")).MustHaveHappened();
+      }
+    }
   }
 }

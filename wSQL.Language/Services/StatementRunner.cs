@@ -13,19 +13,23 @@ namespace wSQL.Language.Services
       if (!tokens.Any())
         return;
 
+      object rhs;
       switch (tokens[0].Value.ToUpperInvariant())
       {
         case "DECLARE":
           ExpectTokens(tokens, 1);
 
           foreach (var token in tokens.Skip(1))
+          {
             context.Symbols.Declare(token.Value);
+          }
           break;
 
         case "PRINT":
           ExpectTokens(tokens, 1);
 
-          context.Core.Print(GetValue(tokens[1], context));
+          rhs = GetValue(tokens[1], context);
+          context.Core.Print(rhs);
           break;
 
         case "LOAD":
@@ -33,7 +37,18 @@ namespace wSQL.Language.Services
           if (tokens[1].Type != TokenType.OpenPar || tokens[3].Type != TokenType.ClosedPar)
             throw new Exception("Invalid syntax.");
 
-          context.Core.OpenPage(GetValue(tokens[2], context).ToString());
+          rhs = GetValue(tokens[2], context);
+          context.Core.OpenPage(rhs.ToString());
+          break;
+
+        case "SET":
+          ExpectTokens(tokens, 3);
+          if (tokens[2].Type != TokenType.Assignment)
+            throw new Exception("Invalid syntax.");
+
+          var lhs = tokens[1].Value;
+          rhs = GetValue(tokens[3], context);
+          context.Symbols.Set(lhs, rhs);
           break;
       }
     }
