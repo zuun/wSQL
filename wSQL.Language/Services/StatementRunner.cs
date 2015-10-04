@@ -13,11 +13,13 @@ namespace wSQL.Language.Services
     {
       executors = new Dictionary<string, Executor>
       {
-        {"DECLARE", new Declare()},
-        {"PRINT", new Print()},
-        {"LOAD", new Load()},
-        {"SET", new Set()},
+        {"declare", new Declare(this)},
+        {"print", new Print(this)},
+        {"load", new Load(this)},
+        {"set", new Set(this)},
       };
+      variable = new Variable(this);
+      stringConstant = new StringConstant(this);
     }
 
     public dynamic Run(IList<Token> tokens, Context context)
@@ -25,16 +27,30 @@ namespace wSQL.Language.Services
       if (!tokens.Any())
         return null;
 
-      var name = tokens[0].Value.ToUpperInvariant();
-      if (!executors.ContainsKey(name))
-        throw new Exception("Unknown statement: " + name);
+      var name = tokens[0].Value;
 
-      var executor = executors[name];
-      return executor.Run(tokens, context);
+      // precedence: string constant, statement/function, variable
+
+      if (tokens[0].Type == TokenType.String)
+        return stringConstant.Run(tokens, context);
+
+      if (executors.ContainsKey(name))
+      {
+        var executor = executors[name];
+        return executor.Run(tokens, context);
+      }
+
+      if (context.Symbols.Exists(name))
+        return variable.Run(tokens, context);
+
+      // if all failed, assume it's a mispelled statement name
+      throw new Exception("Unknown statement: " + name);
     }
 
     //
 
     private readonly Dictionary<string, Executor> executors;
+    private readonly Executor variable;
+    private readonly Executor stringConstant;
   }
 }

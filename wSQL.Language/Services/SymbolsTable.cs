@@ -27,6 +27,11 @@ namespace wSQL.Language.Services
       return dict[name];
     }
 
+    public bool Exists(string name)
+    {
+      return dict.ContainsKey(name);
+    }
+
     //
 
     private readonly Dictionary<string, object> dict = new Dictionary<string, object>();

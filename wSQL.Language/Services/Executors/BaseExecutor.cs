@@ -11,18 +11,18 @@ namespace wSQL.Language.Services.Executors
 
     //
 
+    // ReSharper disable once InconsistentNaming
+    protected Executor recurse;
+
+    protected BaseExecutor(Executor recurse)
+    {
+      this.recurse = recurse;
+    }
+
     protected static void ExpectTokens(ICollection<Token> tokens, int count)
     {
       if (tokens.Count < count + 1)
         throw new Exception(string.Format("Missing argument(s), expected at least {0} but found only {1}.", count, (tokens.Count - 1)));
-    }
-
-    protected static object GetValue(Token token, Context context)
-    {
-      var argument = token;
-      var value = argument.Type == TokenType.Identifier ? context.Symbols.Get(argument.Value) : Unquote(argument.Value);
-
-      return value;
     }
 
     protected static string Unquote(string s)

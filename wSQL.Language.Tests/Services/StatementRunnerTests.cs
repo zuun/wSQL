@@ -73,7 +73,7 @@ namespace wSQL.Language.Tests.Services
           new Token(TokenType.Identifier, "print"),
           new Token(TokenType.Identifier, "abc"),
         };
-
+        A.CallTo(() => symbols.Exists("abc")).Returns(true);
         A.CallTo(() => symbols.Get("abc")).Returns("def");
 
         sut.Run(tokens, context);
@@ -125,6 +125,7 @@ namespace wSQL.Language.Tests.Services
           new Token(TokenType.Identifier, "abc"),
           new Token(TokenType.ClosedPar, ")"),
         };
+        A.CallTo(() => symbols.Exists("abc")).Returns(true);
         A.CallTo(() => symbols.Get("abc")).Returns("def");
 
         sut.Run(tokens, context);
@@ -179,7 +180,28 @@ namespace wSQL.Language.Tests.Services
           new Token(TokenType.Assignment, "="),
           new Token(TokenType.Identifier, "b"),
         };
+        A.CallTo(() => symbols.Exists("b")).Returns(true);
         A.CallTo(() => symbols.Get("b")).Returns("def");
+
+        sut.Run(tokens, context);
+
+        A.CallTo(() => symbols.Set("a", "def")).MustHaveHappened();
+      }
+
+      [TestMethod]
+      public void SetsVariableToResultOfLoadCall()
+      {
+        var tokens = new[]
+        {
+          new Token(TokenType.Identifier, "set"),
+          new Token(TokenType.Identifier, "a"),
+          new Token(TokenType.Assignment, "="),
+          new Token(TokenType.Identifier, "load"),
+          new Token(TokenType.OpenPar, "("),
+          new Token(TokenType.String, "\"abc\""),
+          new Token(TokenType.ClosedPar, ")"),
+        };
+        A.CallTo(() => core.OpenPage("abc")).Returns("def");
 
         sut.Run(tokens, context);
 

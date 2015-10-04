@@ -52,6 +52,8 @@
     <Compile Include="Services\Executors\Load.cs" />
     <Compile Include="Services\Executors\Print.cs" />
     <Compile Include="Services\Executors\Set.cs" />
+    <Compile Include="Services\Executors\StringConstant.cs" />
+    <Compile Include="Services\Executors\Variable.cs" />
     <Compile Include="Services\Interpreter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Lexer.cs" />

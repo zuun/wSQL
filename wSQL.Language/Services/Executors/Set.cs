@@ -1,11 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using wSQL.Language.Contracts;
 using wSQL.Language.Models;
 
 namespace wSQL.Language.Services.Executors
 {
   public class Set : BaseExecutor
   {
+    public Set(Executor recurse)
+      : base(recurse)
+    {
+    }
+
     public override dynamic Run(IList<Token> tokens, Context context)
     {
       ExpectTokens(tokens, 3);
@@ -14,7 +21,7 @@ namespace wSQL.Language.Services.Executors
         throw new Exception("Invalid syntax.");
 
       var lhs = tokens[1].Value;
-      var rhs = GetValue(tokens[3], context);
+      var rhs = recurse.Run(tokens.Skip(3).ToArray(), context);
       context.Symbols.Set(lhs, rhs);
 
       return null;
