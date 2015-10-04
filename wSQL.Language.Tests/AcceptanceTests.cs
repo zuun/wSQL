@@ -15,7 +15,8 @@ namespace wSQL.Language.Tests
     {
       var symbols = new SymbolsTable();
       var tokenizer = A.Fake<Tokenizer>();
-      var sut = new Interpreter(symbols, tokenizer);
+      var executor = A.Fake<Executor>();
+      var sut = new Interpreter(symbols, tokenizer, executor);
       var core = A.Fake<WebCoreRepository>();
 
       sut.Run(Resources.Sample1, core);

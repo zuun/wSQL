@@ -1,4 +1,6 @@
-﻿using FakeItEasy;
+﻿using System.Collections;
+using System.Collections.Generic;
+using FakeItEasy;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using wSQL.Business.Repository;
 using wSQL.Language.Contracts;
@@ -12,6 +14,7 @@ namespace wSQL.Language.Tests.Services
   {
     private Symbols symbols;
     private Tokenizer tokenizer;
+    private Executor executor;
     private Interpreter sut;
 
     [TestInitialize]
@@ -19,7 +22,8 @@ namespace wSQL.Language.Tests.Services
     {
       symbols = A.Fake<Symbols>();
       tokenizer = A.Fake<Tokenizer>();
-      sut = new Interpreter(symbols, tokenizer);
+      executor = A.Fake<Executor>();
+      sut = new Interpreter(symbols, tokenizer, executor);
     }
 
     [TestClass]
@@ -31,6 +35,23 @@ namespace wSQL.Language.Tests.Services
         sut.Run("some line", null);
 
         A.CallTo(() => tokenizer.Parse("some line")).MustHaveHappened();
+      }
+
+      [TestMethod]
+      public void CallsTheExecutor()
+      {
+        var tokens = new[]
+        {
+          new Token(TokenType.Identifier, "statement"),
+          new Token(TokenType.Identifier, "arg1"),
+          new Token(TokenType.Identifier, "arg2"),
+          new Token(TokenType.Identifier, "arg3"),
+        };
+        A.CallTo(() => tokenizer.Parse("statement arg1, arg2, arg3")).Returns(tokens);
+
+        sut.Run("statement arg1, arg2, arg3", null);
+
+        A.CallTo(() => executor.Run(A<IList<Token>>.That.IsSameSequenceAs(tokens), A<Context>.Ignored)).MustHaveHappened();
       }
     }
 
