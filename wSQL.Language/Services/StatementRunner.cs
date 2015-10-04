@@ -17,6 +17,7 @@ namespace wSQL.Language.Services
         {"print", new Print(this)},
         {"load", new Load(this)},
         {"set", new Set(this)},
+        {"find", new Find(this)},
       };
       variable = new Variable(this);
       stringConstant = new StringConstant(this);

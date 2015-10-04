@@ -208,5 +208,28 @@ namespace wSQL.Language.Tests.Services
         A.CallTo(() => symbols.Set("a", "def")).MustHaveHappened();
       }
     }
+
+    [TestClass]
+    public class Find : StatementRunnerTests
+    {
+      [TestMethod]
+      public void LoadsVariable()
+      {
+        var tokens = new[]
+        {
+          new Token(TokenType.Identifier, "find"),
+          new Token(TokenType.OpenPar, "("),
+          new Token(TokenType.Identifier, "page"),
+          new Token(TokenType.String, "\"//div\""),
+          new Token(TokenType.ClosedPar, ")"),
+        };
+        A.CallTo(() => symbols.Exists("page")).Returns(true);
+        A.CallTo(() => symbols.Get("page")).Returns("abc");
+
+        sut.Run(tokens, context);
+
+        A.CallTo(() => core.Find("abc", "//div")).MustHaveHappened();
+      }
+    }
   }
 }
