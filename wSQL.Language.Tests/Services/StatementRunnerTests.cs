@@ -262,11 +262,12 @@ namespace wSQL.Language.Tests.Services
       {
         var tokens = new[]
         {
+          new Token(TokenType.Identifier, "a"),
           new Token(TokenType.Access, "."),
           new Token(TokenType.Identifier, "b"),
         };
-        A.CallTo(() => symbols.Exists("$")).Returns(true);
-        A.CallTo(() => symbols.Get("$")).Returns(new {b = "cde"});
+        A.CallTo(() => symbols.Exists("a")).Returns(true);
+        A.CallTo(() => symbols.Get("a")).Returns(new {b = "cde"});
 
         var result = sut.Run(tokens, context);
 

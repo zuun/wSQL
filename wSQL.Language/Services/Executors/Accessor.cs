@@ -15,10 +15,10 @@ namespace wSQL.Language.Services.Executors
 
     public override dynamic Run(IList<Token> tokens, Context context)
     {
-      ExpectTokens(tokens, 1);
+      ExpectTokens(tokens, 2);
 
-      var it = context.Symbols.Get("$");
-      var name = tokens[1].Value;
+      var it = context.Symbols.Get(tokens[0].Value);
+      var name = tokens[2].Value;
 
       var property = it.GetType().GetProperty(name, BindingFlags.Public | BindingFlags.Instance);
       if (property == null)

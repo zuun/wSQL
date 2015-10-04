@@ -54,6 +54,7 @@
     <Compile Include="Services\Executors\Flatten.cs" />
     <Compile Include="Services\Executors\Lambda.cs" />
     <Compile Include="Services\Executors\Load.cs" />
+    <Compile Include="Services\Executors\Map.cs" />
     <Compile Include="Services\Executors\Print.cs" />
     <Compile Include="Services\Executors\Set.cs" />
     <Compile Include="Services\Executors\StringConstant.cs" />

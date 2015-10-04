@@ -34,7 +34,7 @@ namespace wSQL.Language.Services
 
       // precedence: accessor, string constant, statement/function, variable
 
-      if (tokens[0].Type == TokenType.Access)
+      if (tokens.Count > 1 && tokens[1].Type == TokenType.Access && tokens[0].Type == TokenType.Identifier)
         return accessor.Run(tokens, context);
 
       if (tokens[0].Type == TokenType.String)
