@@ -18,7 +18,8 @@ namespace wSQL.Language.Tests.Services
 
       sut.AddDefinition(new TokenDefinition(TokenType.Identifier, false, new Regex("[A-Za-z_][A-Za-z0-9_]*")));
       sut.AddDefinition(new TokenDefinition(TokenType.Separator, true, new Regex("[ ,]")));
-      sut.AddDefinition(new TokenDefinition(TokenType.Assignment, false, new Regex("[=]")));
+      sut.AddDefinition(new TokenDefinition(TokenType.Lambda, false, new Regex("=>")));
+      sut.AddDefinition(new TokenDefinition(TokenType.Assignment, false, new Regex("=")));
       sut.AddDefinition(new TokenDefinition(TokenType.String, false, new Regex("\"[^\"]*\"")));
       sut.AddDefinition(new TokenDefinition(TokenType.OpenPar, false, new Regex("[(]")));
       sut.AddDefinition(new TokenDefinition(TokenType.ClosedPar, false, new Regex("[)]")));
@@ -120,6 +121,26 @@ namespace wSQL.Language.Tests.Services
         new Token(TokenType.Identifier, "load"),
         new Token(TokenType.OpenPar, "("),
         new Token(TokenType.String, "\"abc def\""),
+        new Token(TokenType.ClosedPar, ")"),
+      },
+        result);
+    }
+
+    [TestMethod]
+    public void IdentifiesLambdas()
+    {
+      //map(descriptionNodes, it => it.InnerText)
+
+      var result = sut.Parse("map(list, it => it)").ToArray();
+
+      CollectionAssert.AreEqual(new[]
+      {
+        new Token(TokenType.Identifier, "map"),
+        new Token(TokenType.OpenPar, "("),
+        new Token(TokenType.Identifier, "list"),
+        new Token(TokenType.Identifier, "it"),
+        new Token(TokenType.Lambda, "=>"),
+        new Token(TokenType.Identifier, "it"),
         new Token(TokenType.ClosedPar, ")"),
       },
         result);
