@@ -23,6 +23,7 @@ namespace wSQL.Language.Tests.Services
       sut.AddDefinition(new TokenDefinition(TokenType.String, false, new Regex("\"[^\"]*\"")));
       sut.AddDefinition(new TokenDefinition(TokenType.OpenPar, false, new Regex("[(]")));
       sut.AddDefinition(new TokenDefinition(TokenType.ClosedPar, false, new Regex("[)]")));
+      sut.AddDefinition(new TokenDefinition(TokenType.Access, false, new Regex("[.]")));
     }
 
     [TestMethod]
@@ -129,8 +130,6 @@ namespace wSQL.Language.Tests.Services
     [TestMethod]
     public void IdentifiesLambdas()
     {
-      //map(descriptionNodes, it => it.InnerText)
-
       var result = sut.Parse("map(list, it => it)").ToArray();
 
       CollectionAssert.AreEqual(new[]
@@ -141,6 +140,26 @@ namespace wSQL.Language.Tests.Services
         new Token(TokenType.Identifier, "it"),
         new Token(TokenType.Lambda, "=>"),
         new Token(TokenType.Identifier, "it"),
+        new Token(TokenType.ClosedPar, ")"),
+      },
+        result);
+    }
+
+    [TestMethod]
+    public void IdentifiesPropertyAccess()
+    {
+      var result = sut.Parse("map(list, it => it.InnerText)").ToArray();
+
+      CollectionAssert.AreEqual(new[]
+      {
+        new Token(TokenType.Identifier, "map"),
+        new Token(TokenType.OpenPar, "("),
+        new Token(TokenType.Identifier, "list"),
+        new Token(TokenType.Identifier, "it"),
+        new Token(TokenType.Lambda, "=>"),
+        new Token(TokenType.Identifier, "it"),
+        new Token(TokenType.Access, "."),
+        new Token(TokenType.Identifier, "InnerText"),
         new Token(TokenType.ClosedPar, ")"),
       },
         result);
