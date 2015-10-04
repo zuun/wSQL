@@ -22,7 +22,7 @@ namespace wSQL
       private RuntimeCoreRepository runtimeCore;
 
       //string[] snippets = { "if(^)\n{\n;\n}", "if(^)\n{\n;\n}\nelse\n{\n;\n}", "for(^;;)\n{\n;\n}", "while(^)\n{\n;\n}", "do\n{\n^;\n}while();", "switch(^)\n{\ncase : break;\n}" };
-      string[] snippets = { "Load(\"^\")" };
+      string[] snippets = { "load (\"^\")", "find( ^, \"\")", "map ( ^, )", "flatten( ^ )"};
 
       public frmMain()
       {
@@ -104,7 +104,7 @@ namespace wSQL
       #endregion
 
       #region file handeling
-      private void createNewContainet(string name)
+      private TabPage createNewContainet(string name, string fullPath = null, bool saved = false)
       {
          //create new tab
          TabPage newPage = new TabPage(name);
@@ -114,7 +114,9 @@ namespace wSQL
          var newEditor = new FastColoredTextBox();
          newEditor.DelayedTextChangedInterval = 1000;
          newEditor.DelayedEventsInterval = 500;
-         newEditor.TextChangedDelayed += new EventHandler<TextChangedEventArgs>(editor_TextChangedDelayed);
+         newEditor.Language = Language.wQL;
+         //newEditor.TextChangedDelayed += new EventHandler<TextChangedEventArgs>(editor_TextChangedDelayed);
+         newEditor.TextChanged += new EventHandler<TextChangedEventArgs>(editor_TextChangedDelayed);
          newEditor.Name = ProjectConstants.EditorControlName;
          newPage.Controls.Add(newEditor);
          newEditor.Dock = DockStyle.Fill;
@@ -132,7 +134,8 @@ namespace wSQL
          var details = new FileDetails()
          {
             FileName = name,
-            Saved = false
+            FullPath = fullPath,
+            Saved = saved
          };
 
          newPage.Tag = details;
@@ -142,6 +145,8 @@ namespace wSQL
          
          newEditor.BringToFront();
          newEditor.Focus();
+
+         return newPage;
       }
 
       private void editor_TextChangedDelayed(object sender, TextChangedEventArgs e)
@@ -166,10 +171,13 @@ namespace wSQL
       {
          createNewContainet("Untitled");
       }
-
+      
       private void openFile(string fileName)
       {
-
+         var tabPage = createNewContainet(Path.GetFileName(fileName), fileName, true);
+         (tabPage.Controls[0] as FastColoredTextBox).OpenFile(fileName);
+         (tabPage.Tag as FileDetails).Saved = true;
+         updateTab(tabPage);
       }
 
       private void closeActiveFile()
@@ -243,7 +251,8 @@ namespace wSQL
 
       private void openToolStripMenuItem_Click(object sender, EventArgs e)
       {
-         //TODO: open file
+         if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            openFile(openFileDialog1.FileName);
       }
 
       private void closeToolStripMenuItem_Click(object sender, EventArgs e)
@@ -283,7 +292,8 @@ namespace wSQL
 
       private void tabContainer_SelectedIndexChanged(object sender, EventArgs e)
       {
-         tabContainer.SelectedTab.Controls[0].Focus();
+         if (tabContainer.SelectedTab != null)
+            tabContainer.SelectedTab.Controls[0].Focus();
       }
    }
 }
