@@ -95,5 +95,42 @@ namespace wSQL.Language.Tests.Services
         A.CallTo(() => core.Print("abc def")).MustHaveHappened();
       }
     }
+
+    [TestClass]
+    public class Load : StatementRunnerTests
+    {
+      [TestMethod]
+      public void LoadsPageFromConstantStringUrl()
+      {
+        var tokens = new[]
+        {
+          new Token(TokenType.Identifier, "load"),
+          new Token(TokenType.OpenPar, "("),
+          new Token(TokenType.String, "\"abc def\""),
+          new Token(TokenType.ClosedPar, ")"),
+        };
+
+        sut.Run(tokens, context);
+
+        A.CallTo(() => core.Load("abc def")).MustHaveHappened();
+      }
+
+      [TestMethod]
+      public void LoadsPageFromVariableUrl()
+      {
+        var tokens = new[]
+        {
+          new Token(TokenType.Identifier, "load"),
+          new Token(TokenType.OpenPar, "("),
+          new Token(TokenType.Identifier, "abc"),
+          new Token(TokenType.ClosedPar, ")"),
+        };
+        A.CallTo(() => symbols.Get("abc")).Returns("def");
+
+        sut.Run(tokens, context);
+
+        A.CallTo(() => core.Load("def")).MustHaveHappened();
+      }
+    }
   }
 }

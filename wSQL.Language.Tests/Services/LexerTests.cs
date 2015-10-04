@@ -106,5 +106,23 @@ namespace wSQL.Language.Tests.Services
       },
         result);
     }
+
+    [TestMethod]
+    public void IdentifiesAssignmentWithFunctionCall()
+    {
+      var result = sut.Parse("set page = load(\"abc def\")").ToArray();
+
+      CollectionAssert.AreEqual(new[]
+      {
+        new Token(TokenType.Identifier, "set"),
+        new Token(TokenType.Identifier, "page"),
+        new Token(TokenType.Assignment, "="),
+        new Token(TokenType.Identifier, "load"),
+        new Token(TokenType.OpenPar, "("),
+        new Token(TokenType.String, "\"abc def\""),
+        new Token(TokenType.ClosedPar, ")"),
+      },
+        result);
+    }
   }
 }
