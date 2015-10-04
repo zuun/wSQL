@@ -39,10 +39,10 @@ namespace wSQL.Language.Tests.Services
     {
       var tokens = new[]
       {
-        new Token(TokenType.Identifier, "statement"),
-        new Token(TokenType.Identifier, "arg1"),
-        new Token(TokenType.Identifier, "arg2"),
-        new Token(TokenType.Identifier, "arg3"),
+        new Token("identifier", "statement"),
+        new Token("identifier", "arg1"),
+        new Token("identifier", "arg2"),
+        new Token("identifier", "arg3"),
       };
       A.CallTo(() => tokenizer.Parse("statement arg1, arg2, arg3")).Returns(tokens);
 

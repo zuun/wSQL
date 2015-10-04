@@ -2,10 +2,13 @@
 {
   public class Token
   {
-    public TokenType Type { get; private set; }
+    // ReSharper disable once InconsistentNaming
+    public static Token EOF = new Token("(end)", null);
+
+    public string Type { get; private set; }
     public string Value { get; private set; }
 
-    public Token(TokenType type, string value)
+    public Token(string type, string value)
     {
       Type = type;
       Value = value;
@@ -21,7 +24,7 @@
     {
       unchecked
       {
-        return ((int) Type * 397) ^ (Value != null ? Value.GetHashCode() : 0);
+        return ((Type ?? "").GetHashCode() * 397) ^ (Value ?? "").GetHashCode();
       }
     }
   }

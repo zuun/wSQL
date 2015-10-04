@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Text.RegularExpressions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using wSQL.Language.Models;
 using wSQL.Language.Services;
@@ -14,6 +15,9 @@ namespace wSQL.Language.Tests.Services
     public void SetUp()
     {
       sut = new Lexer();
+
+      sut.AddDefinition(new TokenDefinition("identifier", false, new Regex("[A-Za-z_][A-Za-z0-9_]*")));
+      sut.AddDefinition(new TokenDefinition("separator", true, new Regex("[ ,]")));
     }
 
     [TestMethod]
@@ -23,7 +27,8 @@ namespace wSQL.Language.Tests.Services
 
       CollectionAssert.AreEqual(new[]
       {
-        new Token(TokenType.Identifier, "abc"),
+        new Token("identifier", "abc"),
+        Token.EOF,
       },
         result);
     }
@@ -35,8 +40,9 @@ namespace wSQL.Language.Tests.Services
 
       CollectionAssert.AreEqual(new[]
       {
-        new Token(TokenType.Identifier, "a"),
-        new Token(TokenType.Identifier, "b"),
+        new Token("identifier", "a"),
+        new Token("identifier", "b"),
+        Token.EOF,
       },
         result);
     }
@@ -48,10 +54,11 @@ namespace wSQL.Language.Tests.Services
 
       CollectionAssert.AreEqual(new[]
       {
-        new Token(TokenType.Identifier, "declare"),
-        new Token(TokenType.Identifier, "a"),
-        new Token(TokenType.Identifier, "b"),
-        new Token(TokenType.Identifier, "c"),
+        new Token("identifier", "declare"),
+        new Token("identifier", "a"),
+        new Token("identifier", "b"),
+        new Token("identifier", "c"),
+        Token.EOF,
       },
         result);
     }

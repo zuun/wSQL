@@ -34,8 +34,8 @@ namespace wSQL.Language.Tests.Services
       {
         var tokens = new[]
         {
-          new Token(TokenType.Identifier, "declare"),
-          new Token(TokenType.Identifier, "abc"),
+          new Token("identifier", "declare"),
+          new Token("identifier", "abc"),
         };
 
         sut.Run(tokens, context);
@@ -48,10 +48,10 @@ namespace wSQL.Language.Tests.Services
       {
         var tokens = new[]
         {
-          new Token(TokenType.Identifier, "declare"),
-          new Token(TokenType.Identifier, "a"),
-          new Token(TokenType.Identifier, "b"),
-          new Token(TokenType.Identifier, "c"),
+          new Token("identifier", "declare"),
+          new Token("identifier", "a"),
+          new Token("identifier", "b"),
+          new Token("identifier", "c"),
         };
 
         sut.Run(tokens, context);
@@ -70,8 +70,8 @@ namespace wSQL.Language.Tests.Services
       {
         var tokens = new[]
         {
-          new Token(TokenType.Identifier, "print"),
-          new Token(TokenType.Identifier, "abc"),
+          new Token("identifier", "print"),
+          new Token("identifier", "abc"),
         };
 
         A.CallTo(() => symbols.Get("abc")).Returns("def");

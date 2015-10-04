@@ -42,10 +42,10 @@
   <ItemGroup>
     <Compile Include="Contracts\Executor.cs" />
     <Compile Include="Contracts\Symbols.cs" />
+    <Compile Include="Models\TokenDefinition.cs" />
     <Compile Include="Contracts\Tokenizer.cs" />
     <Compile Include="Models\Context.cs" />
     <Compile Include="Models\Token.cs" />
-    <Compile Include="Models\TokenType.cs" />
     <Compile Include="Services\Interpreter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Lexer.cs" />
