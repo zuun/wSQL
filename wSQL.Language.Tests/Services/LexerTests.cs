@@ -18,8 +18,12 @@ namespace wSQL.Language.Tests.Services
 
       sut.AddDefinition(new TokenDefinition(TokenType.Identifier, false, new Regex("[A-Za-z_][A-Za-z0-9_]*")));
       sut.AddDefinition(new TokenDefinition(TokenType.Separator, true, new Regex("[ ,]")));
-      sut.AddDefinition(new TokenDefinition(TokenType.Assignment, false, new Regex("[=]")));
+      sut.AddDefinition(new TokenDefinition(TokenType.Lambda, false, new Regex("=>")));
+      sut.AddDefinition(new TokenDefinition(TokenType.Assignment, false, new Regex("=")));
       sut.AddDefinition(new TokenDefinition(TokenType.String, false, new Regex("\"[^\"]*\"")));
+      sut.AddDefinition(new TokenDefinition(TokenType.OpenPar, false, new Regex("[(]")));
+      sut.AddDefinition(new TokenDefinition(TokenType.ClosedPar, false, new Regex("[)]")));
+      sut.AddDefinition(new TokenDefinition(TokenType.Access, false, new Regex("[.]")));
     }
 
     [TestMethod]
@@ -86,6 +90,77 @@ namespace wSQL.Language.Tests.Services
       {
         new Token(TokenType.Identifier, "print"),
         new Token(TokenType.String, "\"abc def\""),
+      },
+        result);
+    }
+
+    [TestMethod]
+    public void IdentifiesParentheses()
+    {
+      var result = sut.Parse("load(\"abc def\")").ToArray();
+
+      CollectionAssert.AreEqual(new[]
+      {
+        new Token(TokenType.Identifier, "load"),
+        new Token(TokenType.OpenPar, "("),
+        new Token(TokenType.String, "\"abc def\""),
+        new Token(TokenType.ClosedPar, ")"),
+      },
+        result);
+    }
+
+    [TestMethod]
+    public void IdentifiesAssignmentWithFunctionCall()
+    {
+      var result = sut.Parse("set page = load(\"abc def\")").ToArray();
+
+      CollectionAssert.AreEqual(new[]
+      {
+        new Token(TokenType.Identifier, "set"),
+        new Token(TokenType.Identifier, "page"),
+        new Token(TokenType.Assignment, "="),
+        new Token(TokenType.Identifier, "load"),
+        new Token(TokenType.OpenPar, "("),
+        new Token(TokenType.String, "\"abc def\""),
+        new Token(TokenType.ClosedPar, ")"),
+      },
+        result);
+    }
+
+    [TestMethod]
+    public void IdentifiesLambdas()
+    {
+      var result = sut.Parse("map(list, it => it)").ToArray();
+
+      CollectionAssert.AreEqual(new[]
+      {
+        new Token(TokenType.Identifier, "map"),
+        new Token(TokenType.OpenPar, "("),
+        new Token(TokenType.Identifier, "list"),
+        new Token(TokenType.Identifier, "it"),
+        new Token(TokenType.Lambda, "=>"),
+        new Token(TokenType.Identifier, "it"),
+        new Token(TokenType.ClosedPar, ")"),
+      },
+        result);
+    }
+
+    [TestMethod]
+    public void IdentifiesPropertyAccess()
+    {
+      var result = sut.Parse("map(list, it => it.InnerText)").ToArray();
+
+      CollectionAssert.AreEqual(new[]
+      {
+        new Token(TokenType.Identifier, "map"),
+        new Token(TokenType.OpenPar, "("),
+        new Token(TokenType.Identifier, "list"),
+        new Token(TokenType.Identifier, "it"),
+        new Token(TokenType.Lambda, "=>"),
+        new Token(TokenType.Identifier, "it"),
+        new Token(TokenType.Access, "."),
+        new Token(TokenType.Identifier, "InnerText"),
+        new Token(TokenType.ClosedPar, ")"),
       },
         result);
     }

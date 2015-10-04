@@ -4,7 +4,11 @@
   {
     Identifier,
     Separator,
+    Lambda,
     Assignment,
     String,
+    OpenPar,
+    ClosedPar,
+    Access,
   }
 }

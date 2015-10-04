@@ -21,7 +21,15 @@ namespace wSQL.Language.Services
 
     public object Get(string name)
     {
+      if (!dict.ContainsKey(name))
+        throw new Exception("Unknown variable name: " + name);
+
       return dict[name];
+    }
+
+    public bool Exists(string name)
+    {
+      return dict.ContainsKey(name);
     }
 
     //

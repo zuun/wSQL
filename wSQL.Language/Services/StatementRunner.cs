@@ -3,42 +3,56 @@ using System.Collections.Generic;
 using System.Linq;
 using wSQL.Language.Contracts;
 using wSQL.Language.Models;
+using wSQL.Language.Services.Executors;
 
 namespace wSQL.Language.Services
 {
   public class StatementRunner : Executor
   {
-    public void Run(IList<Token> tokens, Context context)
+    public StatementRunner()
+    {
+      executors = new Dictionary<string, Executor>
+      {
+        {"declare", new Declare(this)},
+        {"print", new Print(this)},
+        {"load", new Load(this)},
+        {"set", new Set(this)},
+        {"find", new Find(this)},
+        {"flatten", new Flatten(this)},
+      };
+      variable = new Variable(this);
+      stringConstant = new StringConstant(this);
+    }
+
+    public dynamic Run(IList<Token> tokens, Context context)
     {
       if (!tokens.Any())
-        return;
+        return null;
 
-      switch (tokens[0].Value.ToUpperInvariant())
+      var name = tokens[0].Value;
+
+      // precedence: string constant, statement/function, variable
+
+      if (tokens[0].Type == TokenType.String)
+        return stringConstant.Run(tokens, context);
+
+      if (executors.ContainsKey(name))
       {
-        case "DECLARE":
-          if (tokens.Count < 2)
-            throw new Exception("Missing argument(s).");
-
-          foreach (var token in tokens.Skip(1))
-            context.Symbols.Declare(token.Value);
-          break;
-
-        case "PRINT":
-          if (tokens.Count < 2)
-            throw new Exception("Missing argument(s).");
-
-          var argument = tokens[1];
-          var value = argument.Type == TokenType.Identifier ? context.Symbols.Get(argument.Value) : Unquote(argument.Value);
-          context.Core.Print(value);
-          break;
+        var executor = executors[name];
+        return executor.Run(tokens, context);
       }
+
+      if (context.Symbols.Exists(name))
+        return variable.Run(tokens, context);
+
+      // if all failed, assume it's a mispelled statement name
+      throw new Exception("Unknown statement: " + name);
     }
 
     //
 
-    private static string Unquote(string s)
-    {
-      return s.Substring(1, s.Length - 2);
-    }
+    private readonly Dictionary<string, Executor> executors;
+    private readonly Executor variable;
+    private readonly Executor stringConstant;
   }
 }
