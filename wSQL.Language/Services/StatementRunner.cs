@@ -16,23 +16,20 @@ namespace wSQL.Language.Services
       switch (tokens[0].Value.ToUpperInvariant())
       {
         case "DECLARE":
-          if (tokens.Count < 2)
-            throw new Exception("Missing argument(s).");
+          ExpectTokens(tokens, 1);
 
           foreach (var token in tokens.Skip(1))
             context.Symbols.Declare(token.Value);
           break;
 
         case "PRINT":
-          if (tokens.Count < 2)
-            throw new Exception("Missing argument(s).");
+          ExpectTokens(tokens, 1);
 
           context.Core.Print(GetValue(tokens[1], context));
           break;
 
         case "LOAD":
-          if (tokens.Count < 4)
-            throw new Exception("Missing argument(s).");
+          ExpectTokens(tokens, 3);
           if (tokens[1].Type != TokenType.OpenPar || tokens[3].Type != TokenType.ClosedPar)
             throw new Exception("Invalid syntax.");
 
@@ -42,6 +39,12 @@ namespace wSQL.Language.Services
     }
 
     //
+
+    private static void ExpectTokens(IList<Token> tokens, int count)
+    {
+      if (tokens.Count < count + 1)
+        throw new Exception("Missing argument(s).");
+    }
 
     private static object GetValue(Token token, Context context)
     {
