@@ -3,12 +3,13 @@
   public enum TokenType
   {
     Identifier,
-    Separator,
+    Whitespace,
     Lambda,
     Assignment,
     String,
     OpenPar,
     ClosedPar,
     Access,
+    Comma,
   }
 }
