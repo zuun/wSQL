@@ -37,6 +37,8 @@ namespace wSQL.Language.Services.Executors
         result.Add(recurse.Run(expr, context));
       }
 
+      context.Symbols.Undeclare(argName);
+
       return result;
     }
   }

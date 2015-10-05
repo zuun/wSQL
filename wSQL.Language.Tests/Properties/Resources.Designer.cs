@@ -61,14 +61,22 @@ namespace wSQL.Language.Tests.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to declare page, list, descriptionNodes, descriptions
+        ///   Looks up a localized string similar to This domain is established to be used for illustrative examples in documents. You may use this
+        ///    domain in examples without prior coordination or asking for permission.
+        ///More information...
+        ///.
+        /// </summary>
+        internal static string Expected2 {
+            get {
+                return ResourceManager.GetString("Expected2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to declare s
         ///
-        ///set page = load(&quot;https://www.google.com/search?q=something+to+search&amp;cad=cbv&amp;sei=drQPVuWtDoS7acCjptgG&quot;)
-        ///print page
-        ///set list = find(page, &quot;//div[class=&apos;srg&apos;]/div[class=&apos;g pb&apos;]&quot;)
-        ///set descriptionNodes = flatten(map(list, it =&gt; find(it, &quot;div[class=&apos;st&apos;]&quot;)))
-        ///set descriptions = map(descriptionNodes, it =&gt; it.InnerText)
-        ///print descriptions
+        ///set s = &quot;Hello, World&quot;
+        ///print s
         ///.
         /// </summary>
         internal static string Sample1 {
@@ -80,11 +88,9 @@ namespace wSQL.Language.Tests.Properties {
         /// <summary>
         ///   Looks up a localized string similar to declare page, list, descriptionNodes, descriptions
         ///
-        ///set page = load(&quot;https://www.google.com/search?q=something+to+search&amp;cad=cbv&amp;sei=drQPVuWtDoS7acCjptgG&quot;)
-        ///print page
-        ///set list = find(page, &quot;//div[class=&apos;srg&apos;]/div[class=&apos;g pb&apos;]&quot;)
-        ///set descriptionNodes = flatten(map(list, it =&gt; find(it, &quot;div[class=&apos;st&apos;]&quot;)))
-        ///set descriptions = map(descriptionNodes, it =&gt; it.InnerText)
+        ///set page = load(&quot;http://example.com&quot;)
+        ///set list = find(page, &quot;//p&quot;)
+        ///set descriptions = map(list, it =&gt; it.InnerText)
         ///print descriptions
         ///.
         /// </summary>

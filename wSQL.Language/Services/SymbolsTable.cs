@@ -14,6 +14,14 @@ namespace wSQL.Language.Services
       dict[name] = null;
     }
 
+    public void Undeclare(string name)
+    {
+      if (!dict.ContainsKey(name))
+        throw new Exception("Variable does not exist: " + name);
+
+      dict.Remove(name);
+    }
+
     public void Set(string name, object value)
     {
       if (!dict.ContainsKey(name))

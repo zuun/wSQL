@@ -17,11 +17,11 @@ namespace wSQL.Language.Services.Executors
     {
       ExpectTokens(tokens, 4);
 
-      if (tokens[1].Type != TokenType.OpenPar || tokens[4].Type != TokenType.ClosedPar)
+      if (tokens[1].Type != TokenType.OpenPar || tokens[3].Type != TokenType.Comma || tokens[5].Type != TokenType.ClosedPar)
         throw new Exception("Invalid syntax.");
 
       var value = recurse.Run(tokens.Skip(2).Take(1).ToArray(), context);
-      var xpath = recurse.Run(tokens.Skip(3).Take(1).ToArray(), context);
+      var xpath = recurse.Run(tokens.Skip(4).Take(1).ToArray(), context);
       return context.Core.Find(value, xpath);
     }
   }

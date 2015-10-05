@@ -223,6 +223,7 @@ namespace wSQL.Language.Tests.Services
           new Token(TokenType.Identifier, "find"),
           new Token(TokenType.OpenPar, "("),
           new Token(TokenType.Identifier, "page"),
+          new Token(TokenType.Comma, ","),
           new Token(TokenType.String, "\"//div\""),
           new Token(TokenType.ClosedPar, ")"),
         };

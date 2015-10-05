@@ -90,6 +90,9 @@
   <ItemGroup>
     <None Include="Resources\Sample2.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Expected2.txt" />
+  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

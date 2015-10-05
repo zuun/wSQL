@@ -1,4 +1,5 @@
-﻿using HtmlAgilityPack;
+﻿using System;
+using HtmlAgilityPack;
 using System.IO;
 using wSQL.Business.Repository;
 using wSQL.Library;
@@ -7,6 +8,8 @@ namespace wSQL.Business.Services
 {
    public class WebCore : WebCoreRepository
    {
+      public event EventHandler<dynamic> OnPrint;
+
       public string OpenPage(string url)
       {
          using (var web = new CookieAwareWebClient())
@@ -32,21 +35,15 @@ namespace wSQL.Business.Services
 
       public void Print(dynamic value)
       {
-         //
+          if (OnPrint != null)
+              OnPrint(this, value);
       }
 
       public dynamic Find(string value, string xpath)
       {
-         string html = "";
-
          HtmlDocument document = new HtmlDocument();
          document.Load(new StringReader(value));
-         var nodes = document.DocumentNode.SelectNodes(xpath);
-         if (nodes != null)
-            foreach (var node in nodes)
-               html += node.OuterHtml + System.Environment.NewLine;
-
-         return html;
+         return document.DocumentNode.SelectNodes(xpath);
       }
 
       public dynamic ExtractText(string value, string xpath)
