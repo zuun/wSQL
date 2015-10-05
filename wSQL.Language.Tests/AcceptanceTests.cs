@@ -38,7 +38,7 @@ namespace wSQL.Language.Tests
       var core = new WebCore();
 
       var sb = new StringBuilder();
-      core.add_OnPrint((_, value) =>
+      core.OnPrint += (_, value) =>
       {
         var list = value as IEnumerable;
         if (list == null)
@@ -48,7 +48,7 @@ namespace wSQL.Language.Tests
           foreach (var item in list)
             sb.AppendLine(item.ToString());
         }
-      });
+      };
 
       sut.Run(Resources.Sample2, core);
 

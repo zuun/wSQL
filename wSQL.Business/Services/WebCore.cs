@@ -8,7 +8,7 @@ namespace wSQL.Business.Services
 {
    public class WebCore : WebCoreRepository
    {
-      public event EventHandler<dynamic> OnPrint;
+      public event EventHandler<object> OnPrint;
 
       public string OpenPage(string url)
       {
