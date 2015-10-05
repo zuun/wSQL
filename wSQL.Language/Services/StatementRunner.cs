@@ -22,6 +22,7 @@ namespace wSQL.Language.Services
       };
       variable = new Variable(this);
       stringConstant = new StringConstant(this);
+      accessor = new Accessor(this);
     }
 
     public dynamic Run(IList<Token> tokens, Context context)
@@ -31,7 +32,10 @@ namespace wSQL.Language.Services
 
       var name = tokens[0].Value;
 
-      // precedence: string constant, statement/function, variable
+      // precedence: accessor, string constant, statement/function, variable
+
+      if (tokens.Count > 1 && tokens[1].Type == TokenType.Access && tokens[0].Type == TokenType.Identifier)
+        return accessor.Run(tokens, context);
 
       if (tokens[0].Type == TokenType.String)
         return stringConstant.Run(tokens, context);
@@ -54,5 +58,6 @@ namespace wSQL.Language.Services
     private readonly Dictionary<string, Executor> executors;
     private readonly Executor variable;
     private readonly Executor stringConstant;
+    private readonly Executor accessor;
   }
 }

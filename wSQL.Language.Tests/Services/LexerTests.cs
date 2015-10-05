@@ -17,13 +17,14 @@ namespace wSQL.Language.Tests.Services
       sut = new Lexer();
 
       sut.AddDefinition(new TokenDefinition(TokenType.Identifier, false, new Regex("[A-Za-z_][A-Za-z0-9_]*")));
-      sut.AddDefinition(new TokenDefinition(TokenType.Separator, true, new Regex("[ ,]")));
+      sut.AddDefinition(new TokenDefinition(TokenType.Access, false, new Regex("[.]")));
+      sut.AddDefinition(new TokenDefinition(TokenType.OpenPar, false, new Regex("[(]")));
+      sut.AddDefinition(new TokenDefinition(TokenType.ClosedPar, false, new Regex("[)]")));
       sut.AddDefinition(new TokenDefinition(TokenType.Lambda, false, new Regex("=>")));
       sut.AddDefinition(new TokenDefinition(TokenType.Assignment, false, new Regex("=")));
       sut.AddDefinition(new TokenDefinition(TokenType.String, false, new Regex("\"[^\"]*\"")));
-      sut.AddDefinition(new TokenDefinition(TokenType.OpenPar, false, new Regex("[(]")));
-      sut.AddDefinition(new TokenDefinition(TokenType.ClosedPar, false, new Regex("[)]")));
-      sut.AddDefinition(new TokenDefinition(TokenType.Access, false, new Regex("[.]")));
+      sut.AddDefinition(new TokenDefinition(TokenType.Comma, false, new Regex(",")));
+      sut.AddDefinition(new TokenDefinition(TokenType.Whitespace, true, new Regex(@"\s+")));
     }
 
     [TestMethod]
@@ -60,7 +61,9 @@ namespace wSQL.Language.Tests.Services
       {
         new Token(TokenType.Identifier, "declare"),
         new Token(TokenType.Identifier, "a"),
+        new Token(TokenType.Comma, ","),
         new Token(TokenType.Identifier, "b"),
+        new Token(TokenType.Comma, ","),
         new Token(TokenType.Identifier, "c"),
       },
         result);
@@ -128,7 +131,7 @@ namespace wSQL.Language.Tests.Services
     }
 
     [TestMethod]
-    public void IdentifiesLambdas()
+    public void IdentifiesMap()
     {
       var result = sut.Parse("map(list, it => it)").ToArray();
 
@@ -137,6 +140,7 @@ namespace wSQL.Language.Tests.Services
         new Token(TokenType.Identifier, "map"),
         new Token(TokenType.OpenPar, "("),
         new Token(TokenType.Identifier, "list"),
+        new Token(TokenType.Comma, ","),
         new Token(TokenType.Identifier, "it"),
         new Token(TokenType.Lambda, "=>"),
         new Token(TokenType.Identifier, "it"),
@@ -155,6 +159,7 @@ namespace wSQL.Language.Tests.Services
         new Token(TokenType.Identifier, "map"),
         new Token(TokenType.OpenPar, "("),
         new Token(TokenType.Identifier, "list"),
+        new Token(TokenType.Comma, ","),
         new Token(TokenType.Identifier, "it"),
         new Token(TokenType.Lambda, "=>"),
         new Token(TokenType.Identifier, "it"),

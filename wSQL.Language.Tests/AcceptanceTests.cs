@@ -16,7 +16,20 @@ namespace wSQL.Language.Tests
     {
       var symbols = new SymbolsTable();
       var tokenizer = CreateLexer();
+      var executor = new StatementRunner();
+      var sut = new Interpreter(symbols, tokenizer, executor);
+      var core = A.Fake<WebCoreRepository>();
 
+      sut.Run(Resources.Sample1, core);
+
+      A.CallTo(() => core.Print("Hello, World")).MustHaveHappened();
+    }
+
+    [TestMethod]
+    public void CodeSample2()
+    {
+      var symbols = new SymbolsTable();
+      var tokenizer = CreateLexer();
       var executor = new StatementRunner();
       var sut = new Interpreter(symbols, tokenizer, executor);
       var core = A.Fake<WebCoreRepository>();
@@ -36,13 +49,14 @@ namespace wSQL.Language.Tests
     {
       var tokenizer = new Lexer();
       tokenizer.AddDefinition(new TokenDefinition(TokenType.Identifier, false, new Regex("[A-Za-z_][A-Za-z0-9_]*")));
-      tokenizer.AddDefinition(new TokenDefinition(TokenType.Separator, true, new Regex("[ ,]")));
+      tokenizer.AddDefinition(new TokenDefinition(TokenType.Access, false, new Regex("[.]")));
+      tokenizer.AddDefinition(new TokenDefinition(TokenType.OpenPar, false, new Regex("[(]")));
+      tokenizer.AddDefinition(new TokenDefinition(TokenType.ClosedPar, false, new Regex("[)]")));
       tokenizer.AddDefinition(new TokenDefinition(TokenType.Lambda, false, new Regex("=>")));
       tokenizer.AddDefinition(new TokenDefinition(TokenType.Assignment, false, new Regex("=")));
       tokenizer.AddDefinition(new TokenDefinition(TokenType.String, false, new Regex("\"[^\"]*\"")));
-      tokenizer.AddDefinition(new TokenDefinition(TokenType.OpenPar, false, new Regex("[(]")));
-      tokenizer.AddDefinition(new TokenDefinition(TokenType.ClosedPar, false, new Regex("[)]")));
-      tokenizer.AddDefinition(new TokenDefinition(TokenType.Access, false, new Regex("[.]")));
+      tokenizer.AddDefinition(new TokenDefinition(TokenType.Comma, false, new Regex(",")));
+      tokenizer.AddDefinition(new TokenDefinition(TokenType.Whitespace, true, new Regex(@"\s+")));
 
       return tokenizer;
     }

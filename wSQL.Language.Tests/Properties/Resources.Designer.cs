@@ -63,17 +63,34 @@ namespace wSQL.Language.Tests.Properties {
         /// <summary>
         ///   Looks up a localized string similar to declare page, list, descriptionNodes, descriptions
         ///
-        ///page = load &quot;https://www.google.com/search?q=something+to+search&amp;cad=cbv&amp;sei=drQPVuWtDoS7acCjptgG&quot;
+        ///set page = load(&quot;https://www.google.com/search?q=something+to+search&amp;cad=cbv&amp;sei=drQPVuWtDoS7acCjptgG&quot;)
         ///print page
-        ///list = find(page, &quot;//div[class=&apos;srg&apos;]/div[class=&apos;g pb&apos;]&quot;)
-        ///descriptionNodes = flatten(map(list, it =&gt; find(it, &quot;div[class=&apos;st&apos;]&quot;)))
-        ///descriptions = map(descriptionNodes, it =&gt; it.InnerText)
+        ///set list = find(page, &quot;//div[class=&apos;srg&apos;]/div[class=&apos;g pb&apos;]&quot;)
+        ///set descriptionNodes = flatten(map(list, it =&gt; find(it, &quot;div[class=&apos;st&apos;]&quot;)))
+        ///set descriptions = map(descriptionNodes, it =&gt; it.InnerText)
         ///print descriptions
         ///.
         /// </summary>
         internal static string Sample1 {
             get {
                 return ResourceManager.GetString("Sample1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to declare page, list, descriptionNodes, descriptions
+        ///
+        ///set page = load(&quot;https://www.google.com/search?q=something+to+search&amp;cad=cbv&amp;sei=drQPVuWtDoS7acCjptgG&quot;)
+        ///print page
+        ///set list = find(page, &quot;//div[class=&apos;srg&apos;]/div[class=&apos;g pb&apos;]&quot;)
+        ///set descriptionNodes = flatten(map(list, it =&gt; find(it, &quot;div[class=&apos;st&apos;]&quot;)))
+        ///set descriptions = map(descriptionNodes, it =&gt; it.InnerText)
+        ///print descriptions
+        ///.
+        /// </summary>
+        internal static string Sample2 {
+            get {
+                return ResourceManager.GetString("Sample2", resourceCulture);
             }
         }
     }

@@ -47,11 +47,14 @@
     <Compile Include="Models\Context.cs" />
     <Compile Include="Models\Token.cs" />
     <Compile Include="Models\TokenType.cs" />
+    <Compile Include="Services\Executors\Accessor.cs" />
     <Compile Include="Services\Executors\BaseExecutor.cs" />
     <Compile Include="Services\Executors\Declare.cs" />
     <Compile Include="Services\Executors\Find.cs" />
     <Compile Include="Services\Executors\Flatten.cs" />
+    <Compile Include="Services\Executors\Lambda.cs" />
     <Compile Include="Services\Executors\Load.cs" />
+    <Compile Include="Services\Executors\Map.cs" />
     <Compile Include="Services\Executors\Print.cs" />
     <Compile Include="Services\Executors\Set.cs" />
     <Compile Include="Services\Executors\StringConstant.cs" />
@@ -68,7 +71,6 @@
       <Name>wSQL.Business</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

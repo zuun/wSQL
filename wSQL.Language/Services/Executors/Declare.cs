@@ -16,7 +16,8 @@ namespace wSQL.Language.Services.Executors
     {
       ExpectTokens(tokens, 1);
 
-      foreach (var token in tokens.Skip(1))
+      var identifiers = tokens.Skip(1).Where(it => it.Type == TokenType.Identifier);
+      foreach (var token in identifiers)
         context.Symbols.Declare(token.Value);
 
       return null;
