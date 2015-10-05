@@ -20,11 +20,23 @@ namespace wSQL.Controls
          this.Controls.Add(consoleTabs);
          consoleTabs.Dock = DockStyle.Fill;
 
+         var textTab = new TabPage();
+         textTab.Name = "TextTab";
+         textTab.Text = "Text Content";
+         var pageContentEditor = new FastColoredTextBox();
+         pageContentEditor.Name = "PageContentEditor";
+         pageContentEditor.Language = Language.Custom;
+         pageContentEditor.Dock = DockStyle.Fill;
+         textTab.Controls.Add(pageContentEditor);
+
+         consoleTabs.TabPages.Add(textTab);
+
+
          var pageTab = new TabPage();
          pageTab.Name = "PageTab";
          pageTab.Text = "Page Content";
 
-         var pageContentEditor = new FastColoredTextBox();
+         pageContentEditor = new FastColoredTextBox();
          pageContentEditor.Name = "PageContentEditor";
          pageContentEditor.Language = FastColoredTextBoxNS.Language.HTML;
          pageContentEditor.Dock = DockStyle.Fill;
@@ -93,6 +105,8 @@ namespace wSQL.Controls
 
          var editor = (FastColoredTextBox)this.Controls.Find("PageContentEditor", true).First();
          editor.Text = PageContent;
+         editor.SelectAll();
+         editor.DoAutoIndent();
 
          var browser = (WebBrowser)this.Controls.Find("PageContentPreview", true).First();
          browser.DocumentText = PageContent;

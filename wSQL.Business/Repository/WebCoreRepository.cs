@@ -7,5 +7,6 @@
 
     void Print(dynamic value);
     dynamic Find(string value, string xpath);
+    dynamic ExtractText(string value, string xpath);
   }
 }

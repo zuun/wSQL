@@ -34,7 +34,7 @@ namespace wSQL
          InitializeComponent();
 
          runtimeCore = new RuntimeCore();
-
+         tabContainer.TabPages.Clear();
          initDocumentToolTips();
          createNewFile();
       }
@@ -196,7 +196,6 @@ namespace wSQL
          string hoveredWord = range.GetFragment("[^\n]").Text;
          e.ToolTipTitle = hoveredWord;
          e.ToolTipText = "This is tooltip for '" + hoveredWord + "'";
-
           */
       }
 
