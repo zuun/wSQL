@@ -1,5 +1,7 @@
 declare page, list, descriptionNodes, descriptions
 
+// this is a comment
+
 set page = load("http://example.com")
 set list = find(page, "//p")
 set descriptions = map(list, it => it.InnerText)

@@ -18,6 +18,7 @@ namespace wSQL.Language.Services
       lexer.AddDefinition(new TokenDefinition(TokenType.String, false, new Regex("\"[^\"]*\"")));
       lexer.AddDefinition(new TokenDefinition(TokenType.Comma, false, new Regex(",")));
       lexer.AddDefinition(new TokenDefinition(TokenType.Whitespace, true, new Regex(@"\s+")));
+      lexer.AddDefinition(new TokenDefinition(TokenType.Whitespace, true, new Regex("//.*")));
 
       return lexer;
     }
