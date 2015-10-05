@@ -47,6 +47,7 @@
     <Compile Include="Models\Context.cs" />
     <Compile Include="Models\Token.cs" />
     <Compile Include="Models\TokenType.cs" />
+    <Compile Include="Services\DefaultLexer.cs" />
     <Compile Include="Services\Executors\Accessor.cs" />
     <Compile Include="Services\Executors\BaseExecutor.cs" />
     <Compile Include="Services\Executors\Declare.cs" />
