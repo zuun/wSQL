@@ -28,10 +28,14 @@
       /// </summary>
       private void InitializeComponent()
       {
+         this.components = new System.ComponentModel.Container();
+         System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
          this.statusStrip1 = new System.Windows.Forms.StatusStrip();
          this.toolStrip1 = new System.Windows.Forms.ToolStrip();
          this.panel3 = new System.Windows.Forms.Panel();
          this.tabContainer = new System.Windows.Forms.TabControl();
+         this.tabPage1 = new System.Windows.Forms.TabPage();
+         this.splitContainer1 = new System.Windows.Forms.SplitContainer();
          this.mainMenu = new System.Windows.Forms.MenuStrip();
          this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
          this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -51,14 +55,15 @@
          this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
          this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
          this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-         this.tabPage1 = new System.Windows.Forms.TabPage();
-         this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+         this.fastColoredTextBox1 = new FastColoredTextBoxNS.FastColoredTextBox();
          this.panel3.SuspendLayout();
          this.tabContainer.SuspendLayout();
-         this.mainMenu.SuspendLayout();
          this.tabPage1.SuspendLayout();
          ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
+         this.splitContainer1.Panel1.SuspendLayout();
          this.splitContainer1.SuspendLayout();
+         this.mainMenu.SuspendLayout();
+         ((System.ComponentModel.ISupportInitialize)(this.fastColoredTextBox1)).BeginInit();
          this.SuspendLayout();
          // 
          // statusStrip1
@@ -96,6 +101,30 @@
          this.tabContainer.Size = new System.Drawing.Size(942, 421);
          this.tabContainer.TabIndex = 0;
          this.tabContainer.SelectedIndexChanged += new System.EventHandler(this.tabContainer_SelectedIndexChanged);
+         // 
+         // tabPage1
+         // 
+         this.tabPage1.Controls.Add(this.splitContainer1);
+         this.tabPage1.Location = new System.Drawing.Point(4, 22);
+         this.tabPage1.Name = "tabPage1";
+         this.tabPage1.Size = new System.Drawing.Size(934, 395);
+         this.tabPage1.TabIndex = 0;
+         this.tabPage1.Text = "tabPage1";
+         this.tabPage1.UseVisualStyleBackColor = true;
+         // 
+         // splitContainer1
+         // 
+         this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+         this.splitContainer1.Location = new System.Drawing.Point(0, 0);
+         this.splitContainer1.Name = "splitContainer1";
+         this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
+         // 
+         // splitContainer1.Panel1
+         // 
+         this.splitContainer1.Panel1.Controls.Add(this.fastColoredTextBox1);
+         this.splitContainer1.Size = new System.Drawing.Size(934, 395);
+         this.splitContainer1.SplitterDistance = 311;
+         this.splitContainer1.TabIndex = 0;
          // 
          // mainMenu
          // 
@@ -238,25 +267,37 @@
          // 
          this.openFileDialog1.FileName = "openFileDialog1";
          // 
-         // tabPage1
+         // fastColoredTextBox1
          // 
-         this.tabPage1.Controls.Add(this.splitContainer1);
-         this.tabPage1.Location = new System.Drawing.Point(4, 22);
-         this.tabPage1.Name = "tabPage1";
-         this.tabPage1.Size = new System.Drawing.Size(934, 395);
-         this.tabPage1.TabIndex = 0;
-         this.tabPage1.Text = "tabPage1";
-         this.tabPage1.UseVisualStyleBackColor = true;
-         // 
-         // splitContainer1
-         // 
-         this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-         this.splitContainer1.Location = new System.Drawing.Point(0, 0);
-         this.splitContainer1.Name = "splitContainer1";
-         this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
-         this.splitContainer1.Size = new System.Drawing.Size(934, 395);
-         this.splitContainer1.SplitterDistance = 311;
-         this.splitContainer1.TabIndex = 0;
+         this.fastColoredTextBox1.AutoCompleteBracketsList = new char[] {
+        '(',
+        ')',
+        '{',
+        '}',
+        '[',
+        ']',
+        '\"',
+        '\"',
+        '\'',
+        '\''};
+         this.fastColoredTextBox1.AutoScrollMinSize = new System.Drawing.Size(179, 14);
+         this.fastColoredTextBox1.BackBrush = null;
+         this.fastColoredTextBox1.CharHeight = 14;
+         this.fastColoredTextBox1.CharWidth = 8;
+         this.fastColoredTextBox1.Cursor = System.Windows.Forms.Cursors.IBeam;
+         this.fastColoredTextBox1.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+         this.fastColoredTextBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+         this.fastColoredTextBox1.Font = new System.Drawing.Font("Courier New", 9.75F);
+         this.fastColoredTextBox1.IsReplaceMode = false;
+         this.fastColoredTextBox1.Location = new System.Drawing.Point(0, 0);
+         this.fastColoredTextBox1.Name = "fastColoredTextBox1";
+         this.fastColoredTextBox1.Paddings = new System.Windows.Forms.Padding(0);
+         this.fastColoredTextBox1.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
+         this.fastColoredTextBox1.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("fastColoredTextBox1.ServiceColors")));
+         this.fastColoredTextBox1.Size = new System.Drawing.Size(934, 311);
+         this.fastColoredTextBox1.TabIndex = 0;
+         this.fastColoredTextBox1.Text = "fastColoredTextBox1";
+         this.fastColoredTextBox1.Zoom = 100;
          // 
          // frmMain
          // 
@@ -272,11 +313,13 @@
          this.Text = "Form1";
          this.panel3.ResumeLayout(false);
          this.tabContainer.ResumeLayout(false);
-         this.mainMenu.ResumeLayout(false);
-         this.mainMenu.PerformLayout();
          this.tabPage1.ResumeLayout(false);
+         this.splitContainer1.Panel1.ResumeLayout(false);
          ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
          this.splitContainer1.ResumeLayout(false);
+         this.mainMenu.ResumeLayout(false);
+         this.mainMenu.PerformLayout();
+         ((System.ComponentModel.ISupportInitialize)(this.fastColoredTextBox1)).EndInit();
          this.ResumeLayout(false);
          this.PerformLayout();
 
@@ -309,6 +352,7 @@
       private System.Windows.Forms.OpenFileDialog openFileDialog1;
       private System.Windows.Forms.TabPage tabPage1;
       private System.Windows.Forms.SplitContainer splitContainer1;
+      private FastColoredTextBoxNS.FastColoredTextBox fastColoredTextBox1;
    }
 }
 
