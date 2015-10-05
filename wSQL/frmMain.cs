@@ -16,6 +16,10 @@ using wSQL.Data.Models;
 using wSQL.Library;
 using wSQL.Controls;
 using wSQL.Models;
+using wSQL.Language.Services;
+using wSQL.Language.Models;
+using System.Text.RegularExpressions;
+using System.Collections;
 
 namespace wSQL
 {
@@ -140,7 +144,7 @@ namespace wSQL
          newEditor.Name = "mainEditor";
          newEditor.DelayedTextChangedInterval = 1000;
          newEditor.DelayedEventsInterval = 500;
-         newEditor.Language = Language.wQL;
+         newEditor.Language = FastColoredTextBoxNS.Language.wQL;
          //newEditor.TextChangedDelayed += new EventHandler<TextChangedEventArgs>(editor_TextChangedDelayed);
          newEditor.TextChanged += new EventHandler<TextChangedEventArgs>(editor_TextChangedDelayed);
          newEditor.ToolTipNeeded += NewEditor_ToolTipNeeded;
@@ -332,16 +336,51 @@ namespace wSQL
       {
 
       }
-
+      
       private void runScriptToolStripMenuItem_Click(object sender, EventArgs e)
       {
-         var response = runtimeCore.RunScript(tabContainer.GetActiveEditor().Text);
+         var console = tabContainer.GetActiveOutputConsole();
+         console.TextOutput = "";
+         try
+         {
+            var interpretor = new Interpreter(new SymbolsTable(), DefaultLexer.Create(), new StatementRunner());
+            var webCore = new WebCore();
+            webCore.OnPrint += WebCore_OnPrint;
+            interpretor.Run(tabContainer.GetActiveEditor().Text, webCore);
+         }
+         catch (Exception ex)
+         {
+            console.TextOutput += ex.Message;
+         }
+         /*
+         var response = runtimeCore.RunScript();
 
          if (((dynamic)response).PageContent != null)
          {
             //enable view for page content
             var console = tabContainer.GetActiveOutputConsole();
             console.PageContent = ((dynamic)response).PageContent;
+         }
+
+         if (((dynamic)response).Text != null)
+         {
+            //enable view for page content
+            var console = tabContainer.GetActiveOutputConsole();
+            console.TextOutput = ((dynamic)response).Text;
+         }
+         */
+      }
+
+      private void WebCore_OnPrint(object sender, object e)
+      {
+         var console = tabContainer.GetActiveOutputConsole();
+         var list = e as IEnumerable;
+         if (list == null)
+            console.TextOutput += e.ToString() + Environment.NewLine;
+         else
+         {
+            foreach (var item in list)
+               console.TextOutput += item.ToString() + Environment.NewLine;
          }
       }
 

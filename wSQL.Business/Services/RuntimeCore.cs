@@ -30,7 +30,7 @@ namespace wSQL.Business.Services
          xPath = ".//li";
          pageContent = webCore.Find(pageContent, xPath);
          dynamic response = new ExpandoObject();
-         var text = webCore.ExtractText(pageContent, ".//li");
+         var text = webCore.ExtractText(pageContent, "//li");
 
          response.Text = text;
          response.PageContent = pageContent;// beautifyHTML(pageContent);

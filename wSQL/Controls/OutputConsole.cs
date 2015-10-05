@@ -24,8 +24,8 @@ namespace wSQL.Controls
          textTab.Name = "TextTab";
          textTab.Text = "Text Content";
          var pageContentEditor = new FastColoredTextBox();
-         pageContentEditor.Name = "PageContentEditor";
-         pageContentEditor.Language = Language.Custom;
+         pageContentEditor.Name = "PageContentTextEditor";
+         pageContentEditor.Language = FastColoredTextBoxNS.Language.Custom;
          pageContentEditor.Dock = DockStyle.Fill;
          textTab.Controls.Add(pageContentEditor);
 
@@ -108,8 +108,13 @@ namespace wSQL.Controls
          editor.SelectAll();
          editor.DoAutoIndent();
 
+         var text = (FastColoredTextBox)this.Controls.Find("PageContentTextEditor", true).First();
+         text.Text = TextOutput;
+
          var browser = (WebBrowser)this.Controls.Find("PageContentPreview", true).First();
          browser.DocumentText = PageContent;
+
+
       }
    }
 }

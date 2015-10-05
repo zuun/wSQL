@@ -98,6 +98,10 @@
       <Project>{90c5e1ed-565f-4f74-8773-51d75ef56908}</Project>
       <Name>wSQL.Data</Name>
     </ProjectReference>
+    <ProjectReference Include="..\wSQL.Language\wSQL.Language.csproj">
+      <Project>{c1689e68-a15a-48d2-a01a-6099a93a5070}</Project>
+      <Name>wSQL.Language</Name>
+    </ProjectReference>
     <ProjectReference Include="..\wSQL.Library\wSQL.Library.csproj">
       <Project>{00e48f36-3889-4e50-afeb-be0ee3758eb7}</Project>
       <Name>wSQL.Library</Name>
