@@ -131,7 +131,7 @@ namespace wSQL.Language.Tests.Services
     }
 
     [TestMethod]
-    public void IdentifiesMap()
+    public void IdentifiesMapWithLambda()
     {
       var result = sut.Parse("map(list, it => it)").ToArray();
 
@@ -150,7 +150,7 @@ namespace wSQL.Language.Tests.Services
     }
 
     [TestMethod]
-    public void IdentifiesPropertyAccess()
+    public void IdentifiesMapWithLambdaAndPropertyAccess()
     {
       var result = sut.Parse("map(list, it => it.InnerText)").ToArray();
 

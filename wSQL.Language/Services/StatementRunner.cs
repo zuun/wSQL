@@ -19,6 +19,7 @@ namespace wSQL.Language.Services
         {"set", new Set(this)},
         {"find", new Find(this)},
         {"flatten", new Flatten(this)},
+        {"map", new Map(this)},
       };
       variable = new Variable(this);
       stringConstant = new StringConstant(this);

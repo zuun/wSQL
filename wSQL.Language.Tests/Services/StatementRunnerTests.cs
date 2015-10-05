@@ -21,7 +21,7 @@ namespace wSQL.Language.Tests.Services
     {
       sut = new StatementRunner();
 
-      symbols = A.Fake<Symbols>();
+      symbols = new SymbolsTable();
       core = A.Fake<WebCoreRepository>();
       context = new Context(symbols, core);
     }
@@ -40,7 +40,7 @@ namespace wSQL.Language.Tests.Services
 
         sut.Run(tokens, context);
 
-        A.CallTo(() => symbols.Declare("abc")).MustHaveHappened();
+        Assert.IsTrue(symbols.Exists("abc"));
       }
 
       [TestMethod]
@@ -56,9 +56,9 @@ namespace wSQL.Language.Tests.Services
 
         sut.Run(tokens, context);
 
-        A.CallTo(() => symbols.Declare("a")).MustHaveHappened();
-        A.CallTo(() => symbols.Declare("b")).MustHaveHappened();
-        A.CallTo(() => symbols.Declare("c")).MustHaveHappened();
+        Assert.IsTrue(symbols.Exists("a"));
+        Assert.IsTrue(symbols.Exists("b"));
+        Assert.IsTrue(symbols.Exists("c"));
       }
     }
 
@@ -73,8 +73,8 @@ namespace wSQL.Language.Tests.Services
           new Token(TokenType.Identifier, "print"),
           new Token(TokenType.Identifier, "abc"),
         };
-        A.CallTo(() => symbols.Exists("abc")).Returns(true);
-        A.CallTo(() => symbols.Get("abc")).Returns("def");
+        symbols.Declare("abc");
+        symbols.Set("abc", "def");
 
         sut.Run(tokens, context);
 
@@ -125,8 +125,8 @@ namespace wSQL.Language.Tests.Services
           new Token(TokenType.Identifier, "abc"),
           new Token(TokenType.ClosedPar, ")"),
         };
-        A.CallTo(() => symbols.Exists("abc")).Returns(true);
-        A.CallTo(() => symbols.Get("abc")).Returns("def");
+        symbols.Declare("abc");
+        symbols.Set("abc", "def");
 
         sut.Run(tokens, context);
 
@@ -164,10 +164,11 @@ namespace wSQL.Language.Tests.Services
           new Token(TokenType.Assignment, "="),
           new Token(TokenType.String, "\"abc\""),
         };
+        symbols.Declare("a");
 
         sut.Run(tokens, context);
 
-        A.CallTo(() => symbols.Set("a", "abc")).MustHaveHappened();
+        Assert.AreEqual("abc", symbols.Get("a"));
       }
 
       [TestMethod]
@@ -180,12 +181,13 @@ namespace wSQL.Language.Tests.Services
           new Token(TokenType.Assignment, "="),
           new Token(TokenType.Identifier, "b"),
         };
-        A.CallTo(() => symbols.Exists("b")).Returns(true);
-        A.CallTo(() => symbols.Get("b")).Returns("def");
+        symbols.Declare("a");
+        symbols.Declare("b");
+        symbols.Set("b", "def");
 
         sut.Run(tokens, context);
 
-        A.CallTo(() => symbols.Set("a", "def")).MustHaveHappened();
+        Assert.AreEqual("def", symbols.Get("a"));
       }
 
       [TestMethod]
@@ -201,11 +203,12 @@ namespace wSQL.Language.Tests.Services
           new Token(TokenType.String, "\"abc\""),
           new Token(TokenType.ClosedPar, ")"),
         };
+        symbols.Declare("a");
         A.CallTo(() => core.OpenPage("abc")).Returns("def");
 
         sut.Run(tokens, context);
 
-        A.CallTo(() => symbols.Set("a", "def")).MustHaveHappened();
+        Assert.AreEqual("def", symbols.Get("a"));
       }
     }
 
@@ -223,8 +226,8 @@ namespace wSQL.Language.Tests.Services
           new Token(TokenType.String, "\"//div\""),
           new Token(TokenType.ClosedPar, ")"),
         };
-        A.CallTo(() => symbols.Exists("page")).Returns(true);
-        A.CallTo(() => symbols.Get("page")).Returns("abc");
+        symbols.Declare("page");
+        symbols.Set("page", "abc");
 
         sut.Run(tokens, context);
 
@@ -245,8 +248,8 @@ namespace wSQL.Language.Tests.Services
           new Token(TokenType.Identifier, "a"),
           new Token(TokenType.ClosedPar, ")"),
         };
-        A.CallTo(() => symbols.Exists("a")).Returns(true);
-        A.CallTo(() => symbols.Get("a")).Returns(new[] {new[] {1, 2}, new[] {3, 4}, new[] {5, 6},});
+        symbols.Declare("a");
+        symbols.Set("a", new[] {new[] {1, 2}, new[] {3, 4}, new[] {5, 6},});
 
         var result = sut.Run(tokens, context);
 
@@ -266,8 +269,8 @@ namespace wSQL.Language.Tests.Services
           new Token(TokenType.Access, "."),
           new Token(TokenType.Identifier, "b"),
         };
-        A.CallTo(() => symbols.Exists("a")).Returns(true);
-        A.CallTo(() => symbols.Get("a")).Returns(new {b = "cde"});
+        symbols.Declare("a");
+        symbols.Set("a", new {b = "cde"});
 
         var result = sut.Run(tokens, context);
 
@@ -276,9 +279,75 @@ namespace wSQL.Language.Tests.Services
     }
 
     [TestClass]
-    public class Lambda : StatementRunnerTests
+    public class Map : StatementRunnerTests
     {
-      //
+      [TestMethod]
+      public void ReturnsListOfConstants()
+      {
+        var tokens = new[]
+        {
+          new Token(TokenType.Identifier, "map"),
+          new Token(TokenType.OpenPar, "("),
+          new Token(TokenType.Identifier, "list"),
+          new Token(TokenType.Comma, ","),
+          new Token(TokenType.Identifier, "it"),
+          new Token(TokenType.Lambda, "=>"),
+          new Token(TokenType.String, "\"x\""),
+          new Token(TokenType.ClosedPar, ")"),
+        };
+        symbols.Declare("list");
+        symbols.Set("list", new[] {"1", "2", "3"});
+
+        var result = sut.Run(tokens, context);
+
+        CollectionAssert.AreEqual(new[] {"x", "x", "x"}, result);
+      }
+
+      [TestMethod]
+      public void ReturnsListOfItems()
+      {
+        var tokens = new[]
+        {
+          new Token(TokenType.Identifier, "map"),
+          new Token(TokenType.OpenPar, "("),
+          new Token(TokenType.Identifier, "list"),
+          new Token(TokenType.Comma, ","),
+          new Token(TokenType.Identifier, "it"),
+          new Token(TokenType.Lambda, "=>"),
+          new Token(TokenType.Identifier, "it"),
+          new Token(TokenType.ClosedPar, ")"),
+        };
+        symbols.Declare("list");
+        symbols.Set("list", new[] {"1", "2", "3"});
+
+        var result = sut.Run(tokens, context);
+
+        CollectionAssert.AreEqual(new[] {"1", "2", "3"}, result);
+      }
+
+      [TestMethod]
+      public void ReturnsListOfItemPropertiess()
+      {
+        var tokens = new[]
+        {
+          new Token(TokenType.Identifier, "map"),
+          new Token(TokenType.OpenPar, "("),
+          new Token(TokenType.Identifier, "list"),
+          new Token(TokenType.Comma, ","),
+          new Token(TokenType.Identifier, "it"),
+          new Token(TokenType.Lambda, "=>"),
+          new Token(TokenType.Identifier, "it"),
+          new Token(TokenType.Access, "."),
+          new Token(TokenType.Identifier, "X"),
+          new Token(TokenType.ClosedPar, ")"),
+        };
+        symbols.Declare("list");
+        symbols.Set("list", new[] {new {X = "1"}, new {X = "2"}, new {X = "3"},});
+
+        var result = sut.Run(tokens, context);
+
+        CollectionAssert.AreEqual(new[] {"1", "2", "3"}, result);
+      }
     }
   }
 }

@@ -34,7 +34,7 @@ namespace wSQL.Language.Tests
       var sut = new Interpreter(symbols, tokenizer, executor);
       var core = A.Fake<WebCoreRepository>();
 
-      sut.Run(Resources.Sample1, core);
+      sut.Run(Resources.Sample2, core);
 
       A.CallTo(() => core.OpenPage("https://www.google.com/search?q=something+to+search&cad=cbv&sei=drQPVuWtDoS7acCjptgG")).MustHaveHappened();
       A.CallTo(() => core.Print(A<string>.Ignored)).MustHaveHappened();

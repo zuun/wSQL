@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using wSQL.Language.Contracts;
@@ -15,20 +16,28 @@ namespace wSQL.Language.Services.Executors
 
     public override dynamic Run(IList<Token> tokens, Context context)
     {
-      // map ( list , name => ... )
-      // for each item in list:
-      //   set name (in symbol table) to value of item
-      //   evaluate ...
-
       var arguments = ExtractArguments(tokens.Skip(1).ToArray(), context);
       var listName = arguments[0].Value;
-      var lambda = arguments.Skip(2).ToArray();
 
-      var list = context.Symbols.Get(listName) as IEnumerable<object>;
+      var list = context.Symbols.Get(listName) as IEnumerable;
       if (list == null)
         throw new Exception("Map: first argument is not a list.");
 
-      return null;
+      var lambda = arguments.Skip(2).ToArray();
+      
+      var argName = lambda[0].Value; // do not evaluate this symbol
+      context.Symbols.Declare(argName);
+
+      var expr = lambda.Skip(2).ToArray();
+
+      var result = new List<object>();
+      foreach (var item in list)
+      {
+        context.Symbols.Set(argName, item);
+        result.Add(recurse.Run(expr, context));
+      }
+
+      return result;
     }
   }
 }

@@ -16,6 +16,9 @@ namespace wSQL.Language.Services
 
     public void Set(string name, object value)
     {
+      if (!dict.ContainsKey(name))
+        throw new Exception("Unknown variable name: " + name);
+
       dict[name] = value;
     }
 
