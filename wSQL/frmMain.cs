@@ -31,7 +31,7 @@ namespace wSQL
       private Dictionary<string, LanguageToolTip> documentToolTips;
       string[] keywords = { "declare", "set" };
       //string[] snippets = { "if(^)\n{\n;\n}", "if(^)\n{\n;\n}\nelse\n{\n;\n}", "for(^;;)\n{\n;\n}", "while(^)\n{\n;\n}", "do\n{\n^;\n}while();", "switch(^)\n{\ncase : break;\n}" };
-      string[] snippets = { "load (\"^\")", "find( ^, \"\")", "map ( ^, )", "flatten( ^ )", "print ^"};
+      string[] snippets = { "load (\"^\")", "find(^, \"\")", "map (^, )", "flatten( ^ )", "print ^", "ToString(^)"};
 
       public frmMain()
       {
