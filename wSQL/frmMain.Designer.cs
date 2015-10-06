@@ -36,6 +36,7 @@
          this.tabContainer = new System.Windows.Forms.TabControl();
          this.tabPage1 = new System.Windows.Forms.TabPage();
          this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+         this.fastColoredTextBox1 = new FastColoredTextBoxNS.FastColoredTextBox();
          this.mainMenu = new System.Windows.Forms.MenuStrip();
          this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
          this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -55,15 +56,16 @@
          this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
          this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
          this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-         this.fastColoredTextBox1 = new FastColoredTextBoxNS.FastColoredTextBox();
+         this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+         this.autosaveOnRunToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
          this.panel3.SuspendLayout();
          this.tabContainer.SuspendLayout();
          this.tabPage1.SuspendLayout();
          ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
          this.splitContainer1.Panel1.SuspendLayout();
          this.splitContainer1.SuspendLayout();
-         this.mainMenu.SuspendLayout();
          ((System.ComponentModel.ISupportInitialize)(this.fastColoredTextBox1)).BeginInit();
+         this.mainMenu.SuspendLayout();
          this.SuspendLayout();
          // 
          // statusStrip1
@@ -126,11 +128,43 @@
          this.splitContainer1.SplitterDistance = 311;
          this.splitContainer1.TabIndex = 0;
          // 
+         // fastColoredTextBox1
+         // 
+         this.fastColoredTextBox1.AutoCompleteBracketsList = new char[] {
+        '(',
+        ')',
+        '{',
+        '}',
+        '[',
+        ']',
+        '\"',
+        '\"',
+        '\'',
+        '\''};
+         this.fastColoredTextBox1.AutoScrollMinSize = new System.Drawing.Size(179, 14);
+         this.fastColoredTextBox1.BackBrush = null;
+         this.fastColoredTextBox1.CharHeight = 14;
+         this.fastColoredTextBox1.CharWidth = 8;
+         this.fastColoredTextBox1.Cursor = System.Windows.Forms.Cursors.IBeam;
+         this.fastColoredTextBox1.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+         this.fastColoredTextBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+         this.fastColoredTextBox1.IsReplaceMode = false;
+         this.fastColoredTextBox1.Location = new System.Drawing.Point(0, 0);
+         this.fastColoredTextBox1.Name = "fastColoredTextBox1";
+         this.fastColoredTextBox1.Paddings = new System.Windows.Forms.Padding(0);
+         this.fastColoredTextBox1.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
+         this.fastColoredTextBox1.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("fastColoredTextBox1.ServiceColors")));
+         this.fastColoredTextBox1.Size = new System.Drawing.Size(934, 311);
+         this.fastColoredTextBox1.TabIndex = 0;
+         this.fastColoredTextBox1.Text = "fastColoredTextBox1";
+         this.fastColoredTextBox1.Zoom = 100;
+         // 
          // mainMenu
          // 
          this.mainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
-            this.scriptToolStripMenuItem});
+            this.scriptToolStripMenuItem,
+            this.optionsToolStripMenuItem});
          this.mainMenu.Location = new System.Drawing.Point(0, 0);
          this.mainMenu.Name = "mainMenu";
          this.mainMenu.Size = new System.Drawing.Size(942, 24);
@@ -267,37 +301,22 @@
          // 
          this.openFileDialog1.FileName = "openFileDialog1";
          // 
-         // fastColoredTextBox1
+         // optionsToolStripMenuItem
          // 
-         this.fastColoredTextBox1.AutoCompleteBracketsList = new char[] {
-        '(',
-        ')',
-        '{',
-        '}',
-        '[',
-        ']',
-        '\"',
-        '\"',
-        '\'',
-        '\''};
-         this.fastColoredTextBox1.AutoScrollMinSize = new System.Drawing.Size(179, 14);
-         this.fastColoredTextBox1.BackBrush = null;
-         this.fastColoredTextBox1.CharHeight = 14;
-         this.fastColoredTextBox1.CharWidth = 8;
-         this.fastColoredTextBox1.Cursor = System.Windows.Forms.Cursors.IBeam;
-         this.fastColoredTextBox1.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
-         this.fastColoredTextBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-         this.fastColoredTextBox1.Font = new System.Drawing.Font("Courier New", 9.75F);
-         this.fastColoredTextBox1.IsReplaceMode = false;
-         this.fastColoredTextBox1.Location = new System.Drawing.Point(0, 0);
-         this.fastColoredTextBox1.Name = "fastColoredTextBox1";
-         this.fastColoredTextBox1.Paddings = new System.Windows.Forms.Padding(0);
-         this.fastColoredTextBox1.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
-         this.fastColoredTextBox1.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("fastColoredTextBox1.ServiceColors")));
-         this.fastColoredTextBox1.Size = new System.Drawing.Size(934, 311);
-         this.fastColoredTextBox1.TabIndex = 0;
-         this.fastColoredTextBox1.Text = "fastColoredTextBox1";
-         this.fastColoredTextBox1.Zoom = 100;
+         this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.autosaveOnRunToolStripMenuItem});
+         this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
+         this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
+         this.optionsToolStripMenuItem.Text = "Options";
+         // 
+         // autosaveOnRunToolStripMenuItem
+         // 
+         this.autosaveOnRunToolStripMenuItem.Checked = true;
+         this.autosaveOnRunToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+         this.autosaveOnRunToolStripMenuItem.Name = "autosaveOnRunToolStripMenuItem";
+         this.autosaveOnRunToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+         this.autosaveOnRunToolStripMenuItem.Text = "Autosave on run";
+         this.autosaveOnRunToolStripMenuItem.Click += new System.EventHandler(this.autosaveOnRunToolStripMenuItem_Click);
          // 
          // frmMain
          // 
@@ -317,9 +336,9 @@
          this.splitContainer1.Panel1.ResumeLayout(false);
          ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
          this.splitContainer1.ResumeLayout(false);
+         ((System.ComponentModel.ISupportInitialize)(this.fastColoredTextBox1)).EndInit();
          this.mainMenu.ResumeLayout(false);
          this.mainMenu.PerformLayout();
-         ((System.ComponentModel.ISupportInitialize)(this.fastColoredTextBox1)).EndInit();
          this.ResumeLayout(false);
          this.PerformLayout();
 
@@ -353,6 +372,8 @@
       private System.Windows.Forms.TabPage tabPage1;
       private System.Windows.Forms.SplitContainer splitContainer1;
       private FastColoredTextBoxNS.FastColoredTextBox fastColoredTextBox1;
+      private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
+      private System.Windows.Forms.ToolStripMenuItem autosaveOnRunToolStripMenuItem;
    }
 }
 

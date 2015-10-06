@@ -206,9 +206,9 @@ namespace wSQL
       private void editor_TextChangedDelayed(object sender, TextChangedEventArgs e)
       {
          FastColoredTextBox tb = (sender as FastColoredTextBox);
-         if (tb.Parent is TabPage)
+         if (tb.Parent.Parent.Parent is TabPage)
          {
-            var parentPage = (TabPage)tb.Parent;
+            var parentPage = (TabPage)tb.Parent.Parent.Parent;
             var info = (FileDetails)parentPage.Tag;
             info.Saved = false;
             updateTab(null);
@@ -339,55 +339,67 @@ namespace wSQL
       
       private void runScriptToolStripMenuItem_Click(object sender, EventArgs e)
       {
+         if (autosaveOnRunToolStripMenuItem.Checked)
+            saveActiveFile();
+
          var console = tabContainer.GetActiveOutputConsole();
          console.TextOutput = "";
+         Application.DoEvents();
+
          try
          {
             var interpretor = new Interpreter(new SymbolsTable(), DefaultLexer.Create(), new StatementRunner());
             var webCore = new WebCore();
             webCore.OnPrint += WebCore_OnPrint;
-            interpretor.Run(tabContainer.GetActiveEditor().Text, webCore);
+            var script = tabContainer.GetActiveEditor().Text;
+            interpretor.Run(script, webCore);
+            //Task.Factory.StartNew(() => interpretor.Run(script, webCore));
+            //interpretor.Run(tabContainer.GetActiveEditor().Text, webCore);
          }
          catch (Exception ex)
          {
             console.TextOutput += ex.Message;
          }
-         /*
-         var response = runtimeCore.RunScript();
+      }
 
-         if (((dynamic)response).PageContent != null)
-         {
-            //enable view for page content
-            var console = tabContainer.GetActiveOutputConsole();
-            console.PageContent = ((dynamic)response).PageContent;
-         }
 
-         if (((dynamic)response).Text != null)
+      private void printItem(object e, OutputConsole console)
+      {
+         var s = e as string;
+         if (s != null)
+            console.TextOutput += s + Environment.NewLine;
+         else
          {
-            //enable view for page content
-            var console = tabContainer.GetActiveOutputConsole();
-            console.TextOutput = ((dynamic)response).Text;
+            var list = e as IEnumerable;
+            if (list != null)
+            {
+               foreach (var item in list)
+               {
+                  printItem(item, console);
+               }
+            }
+            else
+               if (e != null)
+                  printItem(e.ToString(), console);
          }
-         */
       }
 
       private void WebCore_OnPrint(object sender, object e)
       {
+         // Do the dirty work of my method here.
          var console = tabContainer.GetActiveOutputConsole();
-         var list = e as IEnumerable;
-         if (list == null)
-            console.TextOutput += e.ToString() + Environment.NewLine;
-         else
-         {
-            foreach (var item in list)
-               console.TextOutput += item.ToString() + Environment.NewLine;
-         }
+         printItem(e, console);
       }
 
       private void tabContainer_SelectedIndexChanged(object sender, EventArgs e)
       {
          if (tabContainer.SelectedTab != null)
             tabContainer.SelectedTab.Controls[0].Focus();
+      }
+
+      private void autosaveOnRunToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         autosaveOnRunToolStripMenuItem.Checked = !autosaveOnRunToolStripMenuItem.Checked;
       }
    }
 }

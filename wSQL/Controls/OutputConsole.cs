@@ -42,20 +42,17 @@ namespace wSQL.Controls
          pageContentEditor.Dock = DockStyle.Fill;
          pageTab.Controls.Add(pageContentEditor);
 
-         consoleTabs.TabPages.Add(pageTab);
-
+         //consoleTabs.TabPages.Add(pageTab);
 
          var pagePreview = new TabPage();
          pagePreview.Name = "PagePreviewTab";
          pagePreview.Text = "Page Preview";
-         consoleTabs.TabPages.Add(pagePreview);
+         //consoleTabs.TabPages.Add(pagePreview);
 
          var browser = new WebBrowser();
          browser.Dock = DockStyle.Fill;
          browser.Name = "PageContentPreview";
          pagePreview.Controls.Add(browser);
-
-         
       }
 
       public string TextOutput
@@ -103,18 +100,28 @@ namespace wSQL.Controls
       {
          makeConsoleVisible();
 
-         var editor = (FastColoredTextBox)this.Controls.Find("PageContentEditor", true).First();
-         editor.Text = PageContent;
-         editor.SelectAll();
-         editor.DoAutoIndent();
+         var editor = (FastColoredTextBox)this.Controls.Find("PageContentEditor", true).FirstOrDefault();
+         if (editor != null)
+         {
+            editor.Text = PageContent;
+            editor.SelectAll();
+            editor.DoAutoIndent();
+            editor.Parent.Enabled = PageContent != null && PageContent.Trim() != "";
+            editor.Parent.Visible = PageContent != null && PageContent.Trim() != "";
+         }
 
-         var text = (FastColoredTextBox)this.Controls.Find("PageContentTextEditor", true).First();
-         text.Text = TextOutput;
 
-         var browser = (WebBrowser)this.Controls.Find("PageContentPreview", true).First();
-         browser.DocumentText = PageContent;
+         var text = (FastColoredTextBox)this.Controls.Find("PageContentTextEditor", true).FirstOrDefault();
+         if (text != null)
+            text.Text = TextOutput;
 
-
+         var browser = (WebBrowser)this.Controls.Find("PageContentPreview", true).FirstOrDefault();
+         if (browser != null)
+         {
+            browser.DocumentText = PageContent;
+            browser.Parent.Enabled = PageContent != null && PageContent.Trim() != "";
+            browser.Parent.Visible = PageContent != null && PageContent.Trim() != "";
+         }
       }
    }
 }
