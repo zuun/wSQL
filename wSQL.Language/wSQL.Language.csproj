@@ -56,9 +56,12 @@
     <Compile Include="Services\Executors\Load.cs" />
     <Compile Include="Services\Executors\Map.cs" />
     <Compile Include="Services\Executors\Print.cs" />
+    <Compile Include="Services\Executors\PrintList.cs" />
     <Compile Include="Services\Executors\Set.cs" />
     <Compile Include="Services\Executors\StringConstant.cs" />
+    <Compile Include="Services\Executors\ToArray.cs" />
     <Compile Include="Services\Executors\ToString.cs" />
+    <Compile Include="Services\Executors\Trim.cs" />
     <Compile Include="Services\Executors\Variable.cs" />
     <Compile Include="Services\Interpreter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -20,7 +20,11 @@ namespace wSQL.Language.Services
         {"find", new Find(this)},
         {"flatten", new Flatten(this)},
         {"map", new Map(this)},
-         {"ToString", new ToString(this) }
+         {"ToString", new ToString(this) },
+         {"PrintList", new PrintList(this) },
+         {"ToArray", new ToArray(this) },
+         {"Trim", new Trim(this) }
+
       };
       variable = new Variable(this);
       stringConstant = new StringConstant(this);
@@ -32,6 +36,7 @@ namespace wSQL.Language.Services
       if (!tokens.Any())
         return null;
 
+         System.Diagnostics.Debug.WriteLine("Executing: " + string.Join(" ",tokens.Select(t => t.Value).ToArray() ));
       var name = tokens[0].Value;
 
       // precedence: accessor, string constant, statement/function, variable
