@@ -18,31 +18,37 @@ namespace wSQL.Language.Services.Executors
          var arguments = ExtractArguments(tokens.Skip(1).ToArray(), context);
 
          object result = new string[0];
+         object stringValue = null;
+
+         string separator = ",";
+         if (tokens.Count >= 6 && tokens[6].Type == TokenType.String)
+         {
+            separator = tokens[6].Value;
+            separator = separator.Substring(1, separator.Length - 2);
+            if (separator == "\\r\\n")
+               separator = Environment.NewLine;
+         }
+
 
          if (arguments[0].Type == TokenType.Identifier && arguments[0].Value.ToLower() == "it")
          {
-            string separator = ",";
-            if (tokens.Count >= 6 && tokens[6].Type == TokenType.String)
-            {
-               separator = tokens[6].Value;
-               separator = separator.Substring(1, separator.Length - 2);
-               if (separator == "\\r\\n")
-                  separator = Environment.NewLine;
-            }
-            
             var expr = arguments.Take(3).ToArray();
-            //context.Symbols.Set(argName, item);
-            //result.Add(recurse.Run(expr, context));
             var argName = arguments[0].Value; // do not evaluate this symbol
-            //context.Symbols.Set(argName, item);
-            var re  = recurse.Run(expr, context);
-            var response = ((string)re).Split( new string[] { separator } , StringSplitOptions.RemoveEmptyEntries);
-
-            //context.Symbols.Undeclare(argName);
-            result = response;
-
+            stringValue = recurse.Run(expr, context);
          }
+         else
+            stringValue = recurse.Run(arguments, context);
          
+         if (stringValue != null)
+         {
+            if (stringValue is string)
+               result = ((string)stringValue).Split(new string[] { separator }, StringSplitOptions.RemoveEmptyEntries);
+            else
+               throw new Exception("ToArray: Expected string value but " + stringValue.GetType() + " found");
+         }
+         else
+            throw new Exception("ToArray: Expected string value but no value found");
+
          return result;
       }
    }

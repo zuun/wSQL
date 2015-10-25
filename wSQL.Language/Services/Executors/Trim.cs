@@ -16,40 +16,58 @@ namespace wSQL.Language.Services.Executors
       public override dynamic Run(IList<Token> tokens, Context context)
       {
          var arguments = ExtractArguments(tokens.Skip(1).ToArray(), context);
-         
-         if (arguments[0].Type == TokenType.Identifier && arguments[0].Value.ToLower() == "it")
+
+         string trimValue = "";
+         if (arguments.Count >= 4)
          {
-            string trimValue = "";
-            if (arguments.Count >= 4)
+            switch (arguments[arguments.Count-1].Value.TrimStart('"').TrimEnd('"'))
             {
-               switch (arguments[4].Value)
-               {
-                  case "{tab}":
-                     trimValue = "\t";
-                     break;
-                  default:
-                     trimValue = arguments[4].Value;
-                     break;
-               }
+               case "{tab}":
+                  trimValue = "\t";
+                  break;
+               default:
+                  trimValue = arguments[arguments.Count-1].Value.TrimStart('"').TrimEnd('"');
+                  break;
             }
-
-            var expr = arguments.Take(3).ToArray();
-            //context.Symbols.Set(argName, item);
-            //result.Add(recurse.Run(expr, context));
-            var argName = arguments[0].Value; // do not evaluate this symbol
-            //context.Symbols.Set(argName, item);
-            var re = recurse.Run(expr, context);
-            string response = "";
-            if (trimValue.Trim() != "")
-               response = ((string)re).Trim(trimValue.ToCharArray());
-            else
-               response = ((string)re).Trim();
-
-            return response;
-            //context.Symbols.Undeclare(argName);
          }
 
-         throw new NotImplementedException();
+         object expression = null;
+
+         if (arguments[0].Type == TokenType.Identifier && arguments[0].Value.ToLower() == "it")
+         {
+            var expr = arguments.Take(3).ToArray();
+            var argName = arguments[0].Value; // do not evaluate this symbol
+            //context.Symbols.Set(argName, item);
+            expression = recurse.Run(expr, context);
+         }
+         else
+            expression = recurse.Run(arguments, context);
+
+         if (expression is string)
+            return TrimString(expression, trimValue);
+         else
+            if (expression is IEnumerable<string>)
+         {
+            var list = ((IEnumerable<string>)expression).ToArray();
+            for (int index = 0; index < list.Count(); index++)
+               list[index] = TrimString(list[index], trimValue);
+            return list;
+         }
+
+         throw new Exception("Trim expected string values but not foud");
+      }
+
+      private string TrimString(object value, string trimValue = "")
+      {
+         if (value is string)
+         {
+            if (trimValue.Trim() != "")
+               return ((string)value).Trim(trimValue.ToCharArray());
+            else
+               return ((string)value).Trim();
+         }
+         else
+            throw new Exception("String expected for Trim but now found");
       }
    }
 }

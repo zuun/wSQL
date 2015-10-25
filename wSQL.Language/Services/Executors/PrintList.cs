@@ -18,7 +18,10 @@ namespace wSQL.Language.Services.Executors
 
          var rhs = recurse.Run(tokens.Skip(2).ToArray(), context);
          var separator = recurse.Run(tokens.Skip(4).ToArray(), context);
-         context.Core.PrintList(rhs, separator, null);
+         string lineEnd = "";
+         if (tokens.Count >= 6)
+            lineEnd = recurse.Run(tokens.Skip(6).ToArray(), context);
+         context.Core.PrintList(rhs, separator, lineEnd);
 
          return null;
       }

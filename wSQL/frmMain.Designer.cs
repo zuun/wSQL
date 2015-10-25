@@ -54,10 +54,11 @@
          this.scriptToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
          this.runScriptToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
          this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
-         this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
-         this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
          this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
          this.autosaveOnRunToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+         this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+         this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+         this.highlightCurrentLineToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
          this.panel3.SuspendLayout();
          this.tabContainer.SuspendLayout();
          this.tabPage1.SuspendLayout();
@@ -148,6 +149,7 @@
          this.fastColoredTextBox1.Cursor = System.Windows.Forms.Cursors.IBeam;
          this.fastColoredTextBox1.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
          this.fastColoredTextBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+         this.fastColoredTextBox1.Font = new System.Drawing.Font("Courier New", 9.75F);
          this.fastColoredTextBox1.IsReplaceMode = false;
          this.fastColoredTextBox1.Location = new System.Drawing.Point(0, 0);
          this.fastColoredTextBox1.Name = "fastColoredTextBox1";
@@ -297,14 +299,11 @@
          this.toolStripMenuItem5.Name = "toolStripMenuItem5";
          this.toolStripMenuItem5.Size = new System.Drawing.Size(143, 6);
          // 
-         // openFileDialog1
-         // 
-         this.openFileDialog1.FileName = "openFileDialog1";
-         // 
          // optionsToolStripMenuItem
          // 
          this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.autosaveOnRunToolStripMenuItem});
+            this.autosaveOnRunToolStripMenuItem,
+            this.highlightCurrentLineToolStripMenuItem});
          this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
          this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
          this.optionsToolStripMenuItem.Text = "Options";
@@ -317,6 +316,19 @@
          this.autosaveOnRunToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
          this.autosaveOnRunToolStripMenuItem.Text = "Autosave on run";
          this.autosaveOnRunToolStripMenuItem.Click += new System.EventHandler(this.autosaveOnRunToolStripMenuItem_Click);
+         // 
+         // openFileDialog1
+         // 
+         this.openFileDialog1.FileName = "openFileDialog1";
+         // 
+         // highlightCurrentLineToolStripMenuItem
+         // 
+         this.highlightCurrentLineToolStripMenuItem.Checked = true;
+         this.highlightCurrentLineToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+         this.highlightCurrentLineToolStripMenuItem.Name = "highlightCurrentLineToolStripMenuItem";
+         this.highlightCurrentLineToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
+         this.highlightCurrentLineToolStripMenuItem.Text = "Highlight current line";
+         this.highlightCurrentLineToolStripMenuItem.Click += new System.EventHandler(this.highlightCurrentLineToolStripMenuItem_Click);
          // 
          // frmMain
          // 
@@ -374,6 +386,7 @@
       private FastColoredTextBoxNS.FastColoredTextBox fastColoredTextBox1;
       private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
       private System.Windows.Forms.ToolStripMenuItem autosaveOnRunToolStripMenuItem;
+      private System.Windows.Forms.ToolStripMenuItem highlightCurrentLineToolStripMenuItem;
    }
 }
 

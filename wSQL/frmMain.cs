@@ -33,6 +33,9 @@ namespace wSQL
       //string[] snippets = { "if(^)\n{\n;\n}", "if(^)\n{\n;\n}\nelse\n{\n;\n}", "for(^;;)\n{\n;\n}", "while(^)\n{\n;\n}", "do\n{\n^;\n}while();", "switch(^)\n{\ncase : break;\n}" };
       string[] snippets = { "load (\"^\")", "find(^, \"\")", "map (^, )", "flatten( ^ )", "print ^", "ToString(^)", "PrintList (^)", "ToArray(^)", "Trim(^)" };
 
+      Color currentLineColor = Color.FromArgb(100, 210, 210, 255);
+      Color changedLineColor = Color.FromArgb(255, 230, 230, 255);
+
       public frmMain()
       {
          InitializeComponent();
@@ -52,7 +55,7 @@ namespace wSQL
       }
 
       #region editor
-      private void BuildAutocompleteMenu(AutocompleteMenu popupMenu)
+      private void BuildAutocompleteMenu(AutocompleteMenu popupMenu, string[] localVariables = null)
       {
          List<AutocompleteItem> items = new List<AutocompleteItem>();
 
@@ -68,6 +71,13 @@ namespace wSQL
          //items.Add(new InsertSpaceSnippet());
          //items.Add(new InsertSpaceSnippet(@"^(\w+)([=<>!:]+)(\w+)$"));
          //items.Add(new InsertEnterSnippet());
+
+
+         //add code variables
+         //localVariables = new string[9] { "page", "table", "tds", "content", "tdsText", "texts", "test1", "outFile", "printToFile" };
+         if (localVariables != null && localVariables.Count() > 0)
+            foreach(var item in localVariables)
+               items.Add(new AutocompleteItem(item));
 
          //set as autocomplete source
          popupMenu.Items.SetAutocompleteItems(items);
@@ -107,6 +117,128 @@ namespace wSQL
             value.Focus();
          }
       }
+
+
+      private void extractVariables(string text)
+      {
+         Regex regex = new Regex(@"^(?<range>[\w\s]+\b(declare|class|struct|enum|interface)\s+[\w<>,\s]+)|^\s*(declare|public|private|internal|protected)[^\n]+(\n?\s*{|;)?", RegexOptions.Multiline);
+         string[] localVariables;
+
+         foreach (Match r in regex.Matches(text))
+         {
+            string s = r.Value;
+            int i = s.IndexOfAny(new char[] { '=', '{', ';' });
+            if (i >= 0)
+               s = s.Substring(0, i);
+            s = s.Trim();
+            //System.Diagnostics.Debug.WriteLine("--> " + s);
+            if (s.StartsWith("declare"))
+               s = s.TrimStart("declare".ToCharArray());
+
+            localVariables = s.Split(',').Select(str => str.Trim()).ToArray();
+
+            var edior = tabContainer.GetActiveEditor();
+            if (edior != null)
+            {
+               var menu = edior.Tag as AutocompleteMenu;
+               bool doUpdate = false;
+
+
+               if (menu.Tag != null)
+               {
+                  var existentVars = menu.Tag as string[];
+
+                  if (existentVars != null && existentVars.Count() > 0)
+                     doUpdate = !localVariables.SequenceEqual(existentVars);
+                  else if (localVariables != null && localVariables.Count() > 0)
+                     doUpdate = true;
+               }
+               else if (localVariables != null && localVariables.Count() > 0)
+                  doUpdate = true;
+               
+               if (doUpdate)
+               {
+                  menu.Tag = localVariables;
+                  if (localVariables != null && localVariables.Count() > 0)
+                     BuildAutocompleteMenu(menu, localVariables);
+                  else
+                     BuildAutocompleteMenu(menu);
+               }
+            }
+         }
+      }
+      /*
+      private void ReBuildObjectExplorer(string text)
+      {
+         try
+         {
+            List<ExplorerItem> list = new List<ExplorerItem>();
+            int lastClassIndex = -1;
+            //find classes, methods and properties
+            Regex regex = new Regex(@"^(?<range>[\w\s]+\b(class|struct|enum|interface)\s+[\w<>,\s]+)|^\s*(public|private|internal|protected)[^\n]+(\n?\s*{|;)?", RegexOptions.Multiline);
+            foreach (Match r in regex.Matches(text))
+               try
+               {
+                  string s = r.Value;
+                  int i = s.IndexOfAny(new char[] { '=', '{', ';' });
+                  if (i >= 0)
+                     s = s.Substring(0, i);
+                  s = s.Trim();
+
+                  var item = new ExplorerItem() { title = s, position = r.Index };
+                  if (Regex.IsMatch(item.title, @"\b(class|struct|enum|interface)\b"))
+                  {
+                     item.title = item.title.Substring(item.title.LastIndexOf(' ')).Trim();
+                     item.type = ExplorerItemType.Class;
+                     list.Sort(lastClassIndex + 1, list.Count - (lastClassIndex + 1), new ExplorerItemComparer());
+                     lastClassIndex = list.Count;
+                  }
+                  else
+                      if (item.title.Contains(" event "))
+                  {
+                     int ii = item.title.LastIndexOf(' ');
+                     item.title = item.title.Substring(ii).Trim();
+                     item.type = ExplorerItemType.Event;
+                  }
+                  else
+                          if (item.title.Contains("("))
+                  {
+                     var parts = item.title.Split('(');
+                     item.title = parts[0].Substring(parts[0].LastIndexOf(' ')).Trim() + "(" + parts[1];
+                     item.type = ExplorerItemType.Method;
+                  }
+                  else
+                              if (item.title.EndsWith("]"))
+                  {
+                     var parts = item.title.Split('[');
+                     if (parts.Length < 2) continue;
+                     item.title = parts[0].Substring(parts[0].LastIndexOf(' ')).Trim() + "[" + parts[1];
+                     item.type = ExplorerItemType.Method;
+                  }
+                  else
+                  {
+                     int ii = item.title.LastIndexOf(' ');
+                     item.title = item.title.Substring(ii).Trim();
+                     item.type = ExplorerItemType.Property;
+                  }
+                  list.Add(item);
+               }
+               catch {; }
+
+            list.Sort(lastClassIndex + 1, list.Count - (lastClassIndex + 1), new ExplorerItemComparer());
+
+            BeginInvoke(
+                new Action(() =>
+                {
+                   explorerList = list;
+                   dgvObjectExplorer.RowCount = explorerList.Count;
+                   dgvObjectExplorer.Invalidate();
+                })
+            );
+         }
+         catch {; }
+      }
+      */
       #endregion
 
       #region tab functions
@@ -120,6 +252,8 @@ namespace wSQL
       #endregion
 
       #region file handeling
+      private Style sameWordsStyle = new MarkerStyle(new SolidBrush(Color.FromArgb(50, Color.Gray)));
+
       private TabPage createNewContainet(string name, string fullPath = null, bool saved = false)
       {
          //create new tab
@@ -145,12 +279,16 @@ namespace wSQL
          newEditor.DelayedTextChangedInterval = 1000;
          newEditor.DelayedEventsInterval = 500;
          newEditor.Language = FastColoredTextBoxNS.Language.wQL;
-         //newEditor.TextChangedDelayed += new EventHandler<TextChangedEventArgs>(editor_TextChangedDelayed);
-         newEditor.TextChanged += new EventHandler<TextChangedEventArgs>(editor_TextChangedDelayed);
+         newEditor.TextChangedDelayed += new EventHandler<TextChangedEventArgs>(editor_TextChangedDelayed);
+         newEditor.TextChanged += new EventHandler<TextChangedEventArgs>(editor_TextChanged);
+         newEditor.SelectionChangedDelayed += new EventHandler(editor_SelectionChangedDelayed);
          newEditor.ToolTipNeeded += NewEditor_ToolTipNeeded;
          newEditor.Name = ProjectConstants.EditorControlName;
          container.Panel1.Controls.Add(newEditor);
          //newPage.Controls.Add(newEditor);
+         newEditor.CurrentLineColor = highlightCurrentLineToolStripMenuItem.Checked ? currentLineColor : Color.Transparent;
+         newEditor.HighlightingRangeType = HighlightingRangeType.VisibleRange;
+         newEditor.AddStyle(sameWordsStyle);//same words style
          newEditor.Dock = DockStyle.Fill;
 
          AutocompleteMenu popupMenu = new AutocompleteMenu(newEditor);
@@ -180,6 +318,37 @@ namespace wSQL
          return newPage;
       }
 
+      private void editor_SelectionChangedDelayed(object sender, EventArgs e)
+      {
+         FastColoredTextBox tb = (sender as FastColoredTextBox);
+         /*
+         //remember last visit time
+         if (tb.Selection.IsEmpty && tb.Selection.Start.iLine < tb.LinesCount)
+         {
+            if (lastNavigatedDateTime != tb[tb.Selection.Start.iLine].LastVisit)
+            {
+               tb[tb.Selection.Start.iLine].LastVisit = DateTime.Now;
+               lastNavigatedDateTime = tb[tb.Selection.Start.iLine].LastVisit;
+            }
+         }
+         */
+         //highlight same words
+         tb.VisibleRange.ClearStyle(sameWordsStyle);
+         if (!tb.Selection.IsEmpty)
+            return;//user selected diapason
+                   //get fragment around caret
+         var fragment = tb.Selection.GetFragment(@"\w");
+         string text = fragment.Text;
+         if (text.Length == 0)
+            return;
+         //highlight same words
+         Range[] ranges = tb.VisibleRange.GetRanges("\\b" + text + "\\b").ToArray();
+
+         if (ranges.Length > 1)
+            foreach (var r in ranges)
+               r.SetStyle(sameWordsStyle);
+      }
+
       private void NewEditor_ToolTipNeeded(object sender, ToolTipNeededEventArgs e)
       {
          if (!string.IsNullOrEmpty(e.HoveredWord))
@@ -203,7 +372,7 @@ namespace wSQL
           */
       }
 
-      private void editor_TextChangedDelayed(object sender, TextChangedEventArgs e)
+      private void editor_TextChanged(object sender, TextChangedEventArgs e)
       {
          FastColoredTextBox tb = (sender as FastColoredTextBox);
          if (tb.Parent.Parent.Parent is TabPage)
@@ -219,6 +388,12 @@ namespace wSQL
 
          //show invisible chars
          //HighlightInvisibleChars(e.ChangedRange);
+      }
+
+      private void editor_TextChangedDelayed(object sender, TextChangedEventArgs e)
+      {
+         FastColoredTextBox tb = (sender as FastColoredTextBox);
+         extractVariables(tb.Text);
       }
 
       private void createNewFile()
@@ -402,6 +577,22 @@ namespace wSQL
       private void autosaveOnRunToolStripMenuItem_Click(object sender, EventArgs e)
       {
          autosaveOnRunToolStripMenuItem.Checked = !autosaveOnRunToolStripMenuItem.Checked;
+      }
+
+      private void highlightCurrentLineToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         highlightCurrentLineToolStripMenuItem.Checked = !highlightCurrentLineToolStripMenuItem.Checked;
+
+         foreach (TabPage tab in tabContainer.TabPages)
+         {
+            var editor = tab.GetEditor();
+            if (editor != null)
+               editor.CurrentLineColor = highlightCurrentLineToolStripMenuItem.Checked ? currentLineColor : Color.Transparent;
+         }
+
+         var activeEditor = tabContainer.GetActiveEditor();
+         if (activeEditor != null)
+            activeEditor.Invalidate();
       }
    }
 }
