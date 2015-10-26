@@ -51,6 +51,10 @@
     <Compile Include="Repository\WebCoreRepository.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\wSQL.Data\wSQL.Data.csproj">
+      <Project>{90c5e1ed-565f-4f74-8773-51d75ef56908}</Project>
+      <Name>wSQL.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\wSQL.Library\wSQL.Library.csproj">
       <Project>{00e48f36-3889-4e50-afeb-be0ee3758eb7}</Project>
       <Name>wSQL.Library</Name>

@@ -6,6 +6,8 @@ using wSQL.Library;
 using System.Collections;
 using System.Linq;
 using System.Net;
+using wSQL.Data.Models;
+using System.Collections.Generic;
 
 namespace wSQL.Business.Services
 {
@@ -76,8 +78,51 @@ namespace wSQL.Business.Services
          return page.Substring(startIndex, endIndex - startIndex);
       }
 
+      private IEnumerable<string> convertInputToString(dynamic value, dynamic itemSeparator, dynamic lineEnd)
+      {
+         string separator = ",";
+         if (itemSeparator != null && itemSeparator is string)
+            separator = (string)itemSeparator;
+
+         string endLine = Environment.NewLine;
+         if (lineEnd != null && lineEnd is string)
+            endLine = lineEnd as string;
+         
+         string result = "";
+         var list = value as IEnumerable;
+         if (list != null)
+         {
+            bool skeep = false;
+            foreach (var item in list)
+            {
+               if (!(item is string))
+               {
+                  var subList = item as IEnumerable;
+                  if (subList != null)
+                  {
+                     skeep = true;
+                     foreach (var subItem in convertInputToString(subList, separator, endLine))
+                        yield return subItem;
+                     //PrintList(subList, separator, endLine);
+                  }
+               }
+            }
+
+            if (!skeep)
+            {
+               result = string.Join(separator, list.OfType<string>().ToArray());
+               result += endLine;
+               yield return result;
+            }
+         }
+      }
+
       public void PrintList(dynamic value, dynamic itemSeparator, dynamic lineEnd)
       {
+         foreach (var line in convertInputToString(value, itemSeparator, lineEnd))
+            Print(line);
+         
+         /*
          string separator = ",";
          if (itemSeparator != null && itemSeparator is string)
             separator = (string)itemSeparator;
@@ -111,8 +156,8 @@ namespace wSQL.Business.Services
                   result += (string)endLine;
             }
          }
-
-         Print(result);
+         */
+         //Print(result);
       }
 
       public string OpenFile(string fileName)
@@ -123,6 +168,38 @@ namespace wSQL.Business.Services
          }
          else
             throw new FileNotFoundException("Unable to find file: " + fileName);
+      }
+
+      public void WriteToFile(dynamic value, dynamic fileObject, dynamic itemSeparator, dynamic lineEnd)
+      {
+         if (fileObject != null && fileObject is FileObject)
+         {
+            //fileObject.FileMode
+            var fileInfo = (FileObject)fileObject;
+            string content = "";
+            foreach (var item in convertInputToString(value, itemSeparator, lineEnd))
+               content += item;
+
+            try
+            {
+               switch (fileInfo.FileMode)
+               {
+                  case "a":
+                     File.AppendAllText(fileInfo.FileName, content);
+                     break;
+                  default:
+                     File.WriteAllText(fileInfo.FileName, content);
+                     break;
+               }
+            }
+            catch (Exception ex)
+            {
+               throw;
+            }
+
+         }
+         else
+            throw new Exception("WriteToFile missing file information");
       }
    }
 }

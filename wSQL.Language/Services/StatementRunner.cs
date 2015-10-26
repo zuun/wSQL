@@ -23,7 +23,9 @@ namespace wSQL.Language.Services
          {"ToString", new ToString(this) },
          {"PrintList", new PrintList(this) },
          {"ToArray", new ToArray(this) },
-         {"Trim", new Trim(this) }
+         {"Trim", new Trim(this) },
+         {"OpenFile", new OpenFile(this) },
+         {"WriteToFile", new WriteToFile(this) }
 
       };
       variable = new Variable(this);

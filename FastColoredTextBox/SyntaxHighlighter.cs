@@ -664,7 +664,7 @@ namespace FastColoredTextBoxNS
          CSharpClassNameRegex = new Regex(@"\b(class|struct|enum|interface)\s+(?<range>\w+?)\b", RegexCompiledOption);
          CSharpKeywordRegex =
              new Regex(
-                 @"\b(var|set|load|declare|find|map|flatten|print|ToString|PrintList|ToArray|Trim)\b|#region\b|#endregion\b",
+                 @"\b(var|set|load|declare|find|map|flatten|print|ToString|PrintList|ToArray|Trim|WriteToFile)\b|#region\b|#endregion\b",
                  RegexCompiledOption);
       }
 

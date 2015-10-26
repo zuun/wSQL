@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using wSQL.Data.Models;
 using wSQL.Language.Contracts;
 using wSQL.Language.Models;
 
@@ -23,8 +24,7 @@ namespace wSQL.Language.Services.Executors
          string separator = ",";
          if (tokens.Count >= 6 && tokens[6].Type == TokenType.String)
          {
-            separator = tokens[6].Value;
-            separator = separator.Substring(1, separator.Length - 2);
+            separator = tokens[6].Value.ExtractStringValue();
             if (separator == "\\r\\n")
                separator = Environment.NewLine;
          }

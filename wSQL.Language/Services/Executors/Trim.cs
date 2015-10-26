@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using wSQL.Data.Models;
 using wSQL.Language.Contracts;
 using wSQL.Language.Models;
 
@@ -19,17 +20,7 @@ namespace wSQL.Language.Services.Executors
 
          string trimValue = "";
          if (arguments.Count >= 4)
-         {
-            switch (arguments[arguments.Count-1].Value.TrimStart('"').TrimEnd('"'))
-            {
-               case "{tab}":
-                  trimValue = "\t";
-                  break;
-               default:
-                  trimValue = arguments[arguments.Count-1].Value.TrimStart('"').TrimEnd('"');
-                  break;
-            }
-         }
+            trimValue = arguments[arguments.Count - 1].Value.ExtractStringValue();
 
          object expression = null;
 

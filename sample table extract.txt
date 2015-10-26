@@ -1,0 +1,21 @@
+declare page, table, tds, content, tdsText, texts, test1, outFileName, outFile, printFile
+
+set page = load("C:\Users\Bogdan\Desktop\HTML Tables.html")
+set table = find(page, "//table[@class='w3-table-all']/tr")
+
+
+set tdsText = map(table, it => it.OuterHtml)
+
+set texts = ToString(tdsText)
+
+set tds = find(texts, "//tr")
+
+set test1 = map(tds, it => Trim(ToArray(it.InnerText, "\r\n"), "{tab}"))
+
+PrintList (test1, ",", "")
+
+
+set outFileName = "C:\Users\Bogdan\Desktop\outFile.txt"
+set outFile = OpenFile(outFileName, "w")
+
+WriteToFile(test1, outFile, ",", "{nl}")

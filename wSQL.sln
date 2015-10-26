@@ -18,6 +18,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{235BE462-A76E-4C4A-9617-0CBBFEBE28B1}"
 	ProjectSection(SolutionItems) = preProject
 		sample script.txt = sample script.txt
+		sample table extract.txt = sample table extract.txt
 		ToDo.txt = ToDo.txt
 	EndProjectSection
 EndProject
